@@ -22,7 +22,7 @@ See also: http://blog.dannorth.net/introducing-bdd/
 
 from __future__ import print_function
 
-__version_info__ = ( 0, 1, 1, 'alpha', 0 )
+__version_info__ = ( 0, 1, 2, 'alpha', 0 )
 __version_date__ = '$Date$'
 __version__      = '$Revision$'
 __author__       = 'Martin Moene <m.j.moene@eld.physics.LeidenUniv.nl>'
@@ -105,116 +105,50 @@ class CppUnitKindScanner( Scanner ):
             (yield (self.tokenLeaveSuite, None ) )
 
 
-
 class CppUnitScanner( CppUnitKindScanner ):
    """Scanner for CppUnit C++ unit tests.
    See also Kodos - The Python Regex Debugger, http://kodos.sourceforge.net/.
 
-   CPPUNIT_TEST_SUITE (suitename)
+   CPPUNIT_TEST_SUITE (suite_name)
    CPPUNIT_TEST_SUITE_END ()
-   CPPUNIT_TEST (testcasename)
+   CPPUNIT_TEST (test_case_name)
 
    xxx with open( 'test.txt', 'r' ) as f:
    ...   scanner = CppBoostTestScanner( f )
    """
    def __init__( self, f ):
       """Construct from file."""
-      CppUnitKindScanner.__init__(
-         self,
-         f,
-         r'CPPUNIT_',
-         r'CPPUNIT_TEST\s*\(\s*(?P<name>\w+)',
-         r'CPPUNIT_TEST_SUITE\s*\(\s*(?P<name>\w+)',
-         r'CPPUNIT_TEST_SUITE_END' )
-
-#      self.f = f
-#      self.mo_framework  = re.compile( r'CPPUNIT_' )
-#      self.mo_testcase   = re.compile( r'CPPUNIT_TEST\s*\(\s*(?P<name>\w+)' )
-#      self.mo_beginsuite = re.compile( r'CPPUNIT_TEST_SUITE\s*\(\s*(?P<name>\w+)' )
-#      self.mo_endsuite   = re.compile( r'CPPUNIT_TEST_SUITE_END' )
-#
-#   def tokens( self ):
-#      """Return tokens with testsuite and testcase names found as (token, name)
-#      tuple.
-#      """
-#      for line in self.f.readlines():
-#
-#         # ignore lines that do not contain framework instructions:
-#         if not self.mo_framework.search( line ):
-#            continue;
-#
-##         print( line, end='' )
-#
-#         # check for a fixture, or auto test case (most likely case first):
-#         mo = self.mo_testcase.search( line )
-#         if mo:
-#            (yield (self.tokenTestCase, mo.group('name') ) )
-#
-#         # check for a new test suite level:
-#         mo = self.mo_beginsuite.search( line )
-#         if mo:
-#            (yield (self.tokenEnterSuite, mo.group('name') ) )
-#
-#         # check for the end of a test suite level:
-#         mo = self.mo_endsuite.search( line )
-#         if mo:
-#            (yield (self.tokenLeaveSuite, None ) )
+      CppUnitKindScanner.__init__( self, f,
+           re_framwork=r'CPPUNIT_',
+           re_testcase=r'CPPUNIT_TEST\s*\(\s*(?P<name>\w+)',
+         re_beginsuite=r'CPPUNIT_TEST_SUITE\s*\(\s*(?P<name>\w+)',
+           re_endsuite=r'CPPUNIT_TEST_SUITE_END' )
 
 
 class CppBoostTestScanner( CppUnitKindScanner ):
    """Scanner for Boost.Test C++ unit tests.
    See also Kodos - The Python Regex Debugger, http://kodos.sourceforge.net/.
 
-   BOOST_AUTO_TEST_SUITE( suitename )
+   BOOST_AUTO_TEST_SUITE( suite_name )
    BOOST_AUTO_TEST_SUITE_END()
-   BOOST_AUTO_TEST_CASE( testcasename )
-   BOOST_FIXTURE_TEST_CASE( testcasename, fixturename )
+   BOOST_AUTO_TEST_CASE( test_case_name )
+   BOOST_AUTO_TEST_CASE_TEMPLATE( test_case_name, formal_type_parameter_name, collection_of_types )
+   BOOST_TEST_CASE( test_case_name )
+   BOOST_TEST_CASE_TEMPLATE( test_case_name, collection_of_types )
+   BOOST_TEST_CASE_TEMPLATE_FUNCTION( test_case_name, type_name)
+   BOOST_FIXTURE_TEST_CASE( test_case_name, fixture_name )
 
    xxx with open( 'test.txt', 'r' ) as f:
    ...   scanner = CppBoostTestScanner( f )
    """
    def __init__( self, f ):
       """Construct from file."""
-      CppUnitKindScanner.__init__(
-         self,
-         f,
-         r'BOOST_',
-         r'(BOOST_TEST_CASE_TEMPLATE(_FUNCTION)?|BOOST_FIXTURE_TEST_CASE|BOOST(_AUTO)?_TEST_CASE)\s*\(\s*(?P<name>\w+)',
-         r'BOOST_AUTO_TEST_SUITE\s*\(\s*(?P<name>\w+)',
-         r'BOOST_AUTO_TEST_SUITE_END' )
-
-#      self.f = f
-#      self.mo_framework  = re.compile( r'BOOST_' )
-#      self.mo_testcase   = re.compile( r'(BOOST_TEST_CASE_TEMPLATE(_FUNCTION)?|BOOST_FIXTURE_TEST_CASE|BOOST(_AUTO)?_TEST_CASE)\s*\(\s*(?P<name>\w+)' )
-#      self.mo_beginsuite = re.compile( r'BOOST_AUTO_TEST_SUITE\s*\(\s*(?P<name>\w+)' )
-#      self.mo_endsuite   = re.compile( r'BOOST_AUTO_TEST_SUITE_END' )
-#
-#   def tokens( self ):
-#      """Return tokens with testsuite and testcase names found as (token, name)
-#      tuple.
-#      """
-#      for line in self.f.readlines():
-#
-#         # ignore lines that do not contain framework instructions:
-#         if not self.mo_framework.search( line ):
-#            continue;
-#
-##         print( line, end='' )
-#
-#         # check for a fixture, or auto test case (most likely case first):
-#         mo = self.mo_testcase.search( line )
-#         if mo:
-#            (yield (self.tokenTestCase, mo.group('name') ) )
-#
-#         # check for a new test suite level:
-#         mo = self.mo_beginsuite.search( line )
-#         if mo:
-#            (yield (self.tokenEnterSuite, mo.group('name') ) )
-#
-#         # check for the end of a test suite level:
-#         mo = self.mo_endsuite.search( line )
-#         if mo:
-#            (yield (self.tokenLeaveSuite, None ) )
+      CppUnitKindScanner.__init__( self, f,
+           re_framwork=r'BOOST_',
+           re_testcase=r'TEST_CASE(_TEMPLATE(_FUNCTION)?)?\s*\(\s*(?P<name>\w+)',
+#           re_testcase=r'(BOOST_TEST_CASE_TEMPLATE(_FUNCTION)?|BOOST_FIXTURE_TEST_CASE|BOOST(_AUTO)?_TEST_CASE)\s*\(\s*(?P<name>\w+)',
+         re_beginsuite=r'BOOST_AUTO_TEST_SUITE\s*\(\s*(?P<name>\w+)',
+           re_endsuite=r'BOOST_AUTO_TEST_SUITE_END' )
 
 
 class Parser:
