@@ -1,2 +1,3 @@
 include testdox.py
 include ChangeLog.txt
+recursive-include test *.cpp *.h
