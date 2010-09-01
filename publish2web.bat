@@ -1,5 +1,4 @@
-::@echo off & setlocal
-setlocal
+@echo off & setlocal
 ::
 :: publish2web.bat - create highlighted python source and copy files to website.
 ::
@@ -21,12 +20,12 @@ set    highlight=call website\source-highlight-py.bat
 if exist %logfile% del %logfile%
 
 if not exist %testdox_exe% (
-   echo Please first create binary distribution with 'mk dist'.
+   echo %progname%: Please first create binary distribution with 'mk dist'.
    goto :EOF
 )
 
 if not exist MANIFEST (
-   echo Please first create source distribution 'mk sdist'.
+   echo %progname%: Please first create source distribution 'mk sdist'.
    goto :EOF
 )
 
