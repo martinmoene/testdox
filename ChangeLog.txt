@@ -1,0 +1,19 @@
+ChangeLog for testdox.py
+
+TestDox generates a readable overview of test case names from the specified files.
+
+
+0.0.1-alpha  2010-09-01  (martin)
+- Initial script with scanners for the Boost.Test and CppUnit frameworks and
+  output builders for plain text and html.
+___
+
+maj.min.triv  20yy-mm-dd
+- ADD: description
+       description (martin)
+- CHG: text
+- FIX: text
+
+
+$Id$
+

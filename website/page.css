@@ -1,0 +1,9 @@
+
+@import url( "../../styles/codehighlight.css" );
+
+div#toc a {
+   font-size: xx-small;
+   voice-family: "\"}\"";
+   voice-family: inherit;
+   font-size: x-small;
+}

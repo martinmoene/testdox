@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Distribution" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="default">
+				<Option output="Cmakefiles" prefix_auto="1" extension_auto="1" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+			</Target>
+		</Build>
+		<Unit filename="..\..\ChangeLog.txt" />
+		<Unit filename="..\..\MANIFEST.in" />
+		<Unit filename="..\..\Readme.txt" />
+		<Unit filename="..\..\Setup.py" />
+		<Unit filename="..\..\mk.bat" />
+		<Unit filename="..\..\publish2web.bat" />
+		<Unit filename="..\..\set-pyinstallerpath.bat" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
