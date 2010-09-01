@@ -6,7 +6,7 @@
 <li><a href="src/testdox.py">testdox.py</a> (<a href="src/">view highlighted</a>)</li>
 <li><a href="src/Readme.txt">Readme</a></li>
 <li><a href="src/ChangeLog.txt">ChangeLog</a></li>
-<li><a href="src/TestDox-0.1.2-alpha.tar.gz">TestDox-0.1.2-alpha.tar.gz</a></li>
+<li><a href="src/TestDox-0.1.2-alpha.zip">TestDox-0.1.2-alpha.zip</a></li>
 <li><a href="src/testdox.exe">testdox.exe</a> packed executable</li>
 </ul></div>
 
