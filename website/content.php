@@ -6,7 +6,8 @@
 <li><a href="src/testdox.py">testdox.py</a> (<a href="src/">view highlighted</a>)</li>
 <li><a href="src/Readme.txt">Readme</a></li>
 <li><a href="src/ChangeLog.txt">ChangeLog</a></li>
-<li><a href="src/TestDox-0.1.2-alpha.zip">TestDox-0.1.2-alpha.zip</a></li>
+<li><a href="src/ToDo.txt">ToDo</a></li>
+<li><a href="src/TestDox-0.1.3-alpha.zip">TestDox-0.1.3-alpha.zip</a></li>
 <li><a href="src/testdox.exe">testdox.exe</a> packed executable</li>
 </ul></div>
 
@@ -26,27 +27,36 @@ test cases as
 <a title="Sentence at Wikipedia" href="http://en.wikipedia.org/wiki/Sentence_%28linguistics%29">sentences</a>
 and in <a title="The year 2003 at Wikipedia" href="http://en.wikipedia.org/wiki/2003">2003</a> he created the
 <a title="Java at Wikipedia" href="http://en.wikipedia.org/wiki/Java_%28programming_language%29">Java</a> program
-<a title="Chris Stevenson's Blog mentioning TestDox" href="http://skizz.biz/blog/2003/06/17/testdox-release-01/">TestDox </a>.
-To my surprise, the idea seems not to have spread much to other
+<a title="Chris Stevenson's Blog mentioning TestDox" href="http://skizz.biz/blog/2003/06/17/testdox-release-01/">TestDox</a>.
+The idea has spread to several other
 <a title="Programming language at Wikipedia" href="http://en.wikipedia.org/wiki/Programming_language">programming languages</a>
-or <a title="Unit testing frameworks at Wikipedia" href="http://en.wikipedia.org/wiki/Unit_test#Unit_testing_frameworks">test frameworks</a>,
-at least not with respect to <a title="C++ at Wikipedia" href="http://en.wikipedia.org/wiki/C%2B%2B">C++</a>.
+(or their <a title="Unit testing frameworks at Wikipedia" href="http://en.wikipedia.org/wiki/Unit_test#Unit_testing_frameworks">test frameworks</a>),
+such as
+<a title="C# at Wikipedia" href="http://en.wikipedia.org/wiki/C%2B%2B">C#</a>
+(<a title=".net at Wikipedia" href="http://en.wikipedia.org/wiki/C%2B%2B">.net</a>),
+<a title="PHP at Wikipedia" href="http://en.wikipedia.org/wiki/C%2B%2B">PHP</a> and
+<a title="Ruby at Wikipedia" href="http://en.wikipedia.org/wiki/C%2B%2B">Ruby</a>,
+but apparently not yet to
+<a title="C++ at Wikipedia" href="http://en.wikipedia.org/wiki/C%2B%2B">C++</a>.
 </p>
 
 <div class="floater">
 <h3 id="resources">Resources</h3>
 <ul style="padding-left:1.4em">
+<li><a href="http://en.wikipedia.org/wiki/TestDox">TestDox</a> at Wikipedia</li>
 <li><a href="http://blog.dannorth.net/introducing-bdd/">Introducing BDD</a>, by Dan North</li>
 <li><a href="http://joe.truemesh.com/blog//000047.html">Agiledox</a>, by Joe Walnes </li>
 <li><a href="http://agiledox.sourceforge.net/">AgileDox project (Java)</a>, by <a href="http://skizz.biz/blog/">Chris Stevenson</a></li>
-<li><a href="http://skizz.biz/blog/2003/06/17/testdox-release-01/">TestDox release 0.1<a> blog post by <a href="http://skizz.biz/blog/">Chris Stevenson</a></li>
+<li>AgileDox project <a href="http://agiledox.cvs.sourceforge.net/viewvc/agiledox/">CVS repository</a> with testdox, nAgileDox</li>
+<li><a href="http://skizz.biz/blog/2003/06/17/testdox-release-01/">TestDox release 0.1</a> blog post by <a href="http://skizz.biz/blog/">Chris Stevenson</a></li>
 <li><a href="http://testdox.codehaus.org/">TestDox for IntelliJ IDEA</a>, Codehaus</li>
-<li><a href="http://ntestdox.sourceforge.net/">nTestDox for nUnit</a> , by <a href="http://steve.emxsoftware.com/NTestDox/">Steve Eichert</a> (no products)</li>
+<li><a href="http://www.testdox.com/">TestDox for .NET </a>, by NN</li>
 <li><a href="http://www.phpunit.de/manual/3.5/en/other-uses-for-tests.html">TestDox (PHPUnit)</a>, by <a href="http://sebastian-bergmann.de/">Sebastian Bergmann</a></li>
 <li><a href="http://www.slideshare.net/sebastian_bergmann/phpunit-best-practices">PHPUnit Best Practices</a>, by <a href="http://sebastian-bergmann.de/">Sebastian Bergmann</a></li>
+<li><a href="http://xspecs.sourceforge.net/protest.html">Protest</a> test framework for Python, by <a href="http://www.natpryce.com/">Nat Pryce</a> (Subversion <a title="Subversion trunk at SourceForge" href="https://xspecs.svn.sourceforge.net/svnroot/xspecs/protest-python/trunk">trunk</a>)</li>
 <li><a href="http://rspec.info/">rSpec</a>, Behaviour Driven Development framework for Ruby.</li>
-<li><a href="http://www.stickyminds.com/pop_print.asp?ObjectId=14973&ObjectType=ART">Programming with GUTs</a>, by <a href="http://www.curbralan.com/">Kevlin Henney</a></li>
-<li><a href="http://www.stickyminds.com/pop_print.asp?ObjectId=13833&ObjectType=ART">GUT Instinct</a>, by <a href="http://www.curbralan.com/">Kevlin Henney</a></li>
+<li><a href="http://www.stickyminds.com/pop_print.asp?ObjectId=14973&ObjectType=ART">Programming with GUTs</a> and
+<a href="http://www.stickyminds.com/pop_print.asp?ObjectId=13833&ObjectType=ART">GUT Instinct</a>, by <a href="http://www.curbralan.com/">Kevlin Henney</a></li>
 
 </ul></div>
 
@@ -57,6 +67,10 @@ presented here was created for use with the C++ test frameworks
 <a title="CppUnit at Wikipedia" href="http://en.wikipedia.org/wiki/CppUnit">CppUnit</a>.
 It is distributed under the <a title="about the license at Boost.org" href="http://www.boost.org/users/license.html">Boost</a>
 <a title="Open-source license at Wikipedia" href="http://en.wikipedia.org/wiki/Open_source_license">open source license</a>.
+Feel free to grab the source code and change it to your own needs. Please
+<a href="mailto:m.j.moene@eld.physics.LeidenUniv.nl?Subject=TestDox:">let me know</a>
+if you made any substantial changes or additions. We then can add those to testdox.py,
+so that other users also may benefit from them.
 </p>
 
 <h3>Recognized test name patterns</h3>
@@ -87,6 +101,7 @@ Options:
   -v, --verbose    show more messages
   -q, --quiet      show less messages
   -t, --selftest   perform selftest; can also use option -v
+  --title=TITLE    specify title for report [none]
   --framework=FW   select test framework: Boost.Test, CppUnit [Boost.Test]
   --format=FORMAT  select output format: html, text [text]
   --glob=PATTERN   filename pattern to use with directories [*.cpp|*.h]

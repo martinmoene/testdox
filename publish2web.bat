@@ -47,6 +47,7 @@ echo Copying files to subdirectory %websrc% >>%logfile%
 xcopy /y/s %localsrc%   %websrc%\ >>%logfile%
 copy Readme.txt     %websrc%  >>%logfile%
 copy ChangeLog.txt  %websrc%  >>%logfile%
+copy ToDo.txt       %websrc%  >>%logfile%
 copy %testdox_py%   %websrc%  >>%logfile%
 copy %testdox_hpy%  %websrc%  >>%logfile%
 copy %testdox_exe%  %websrc%  >>%logfile%

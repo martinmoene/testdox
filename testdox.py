@@ -22,7 +22,7 @@ See also: http://blog.dannorth.net/introducing-bdd/
 
 from __future__ import print_function
 
-__version_info__ = ( 0, 1, 2, 'alpha', 0 )
+__version_info__ = ( 0, 1, 3, 'alpha', 0 )
 __version_date__ = '$Date$'
 __version__      = '$Revision$'
 __author__       = 'Martin Moene <m.j.moene@eld.physics.LeidenUniv.nl>'
@@ -55,7 +55,8 @@ def versionDate():
 
 class Context:
    """Processing context."""
-   pass
+   def __init__( self, title=None ):
+      self.title = title
 
 
 class Scanner:
@@ -212,14 +213,32 @@ class Parser:
 
 class Builder:
    """Base class for output generators."""
-   def __init__( self, f ):
+   def __init__( self, f, context=Context() ):
       """Constructor."""
       self.f = f
+      self.context = context
       self.cases = 0
       self.suites = []
+      self.writeLeader()
 
    def __del__( self ):
       """Destructor."""
+      self.writeTrailer()
+
+   def writeLeader( self ):
+      """Write the report's leader."""
+      pass
+
+   def writeTrailer( self ):
+      """Write the report's trailer."""
+      pass
+
+   def writeSuiteName( self ):
+      """Write the collected suite name."""
+      pass
+
+   def writeTestCaseName( self, text ):
+      """Write the given test case name."""
       pass
 
    def enterSuite( self, name ):
@@ -240,14 +259,17 @@ class Builder:
       return self.cases
 
    def addTestCase( self, name ):
-      """Add a test case name. If it's the first of a suite, first print
+      """Add a test case name. If it's the first of a suite, first write
       suite name terminated with newline.
       """
-# TODO (moene#1#): better name for print
       self.cases += 1
       if self.cases == 1:
-         self.printSuiteName()
-      self.printTestCaseName( name )
+         self.writeSuiteName()
+      self.writeTestCaseName( name )
+
+   def formatTitle( self ):
+      """Return title as is."""
+      return self.context.title
 
    def formatTestSuiteName( self ):
       """Return suite name as Suite.Subsuite."""
@@ -281,14 +303,14 @@ class Builder:
    def splitCamelCaseWord( self, text ):
       """Return text 'ThingShowsBehaviour' as 'Thing shows behaviour'.
 
-      >>> builder = TextFormatter( sys.stdout )
+      >>> builder = Builder( sys.stdout )
       >>> builder.splitCamelCaseWord( 'thingShowsBehaviour' )
       'Thing shows behaviour'
       """
       return re.sub( r'([A-Z]|\d+)', r' \1',text  ).lstrip().capitalize()
 
 
-class TextFormatter( Builder ):
+class PlainTextWriter( Builder ):
    """Output presented (sub)suites and testcases as plain text in the following
    format:
 
@@ -301,7 +323,8 @@ class TextFormatter( Builder ):
 
    Tests:
    ------
-   >>> builder = TextFormatter( sys.stdout )
+   >>> builder = PlainTextWriter( sys.stdout, Context( title='My Title' ) )
+   My Title
    >>> builder.enterSuite( 'Suite' )
    >>> builder.enterSuite( 'Subsuite' )
    >>> builder.addTestCase( 'testThatAddTestCaseBehavesAsExpected' )
@@ -316,28 +339,26 @@ class TextFormatter( Builder ):
    - Thing shows behaviour.
    >>> builder.leaveSuite()
    """
-   def __init__( self, f ):
+   def __init__( self, f, context=Context()  ):
       """Constructor."""
-      Builder.__init__( self, f )
+      Builder.__init__( self, f, context )
 
    def enterSuite( self, name ):
       """Enter a new test suite level.
-
       Allow for doctest code.
       """
       Builder.enterSuite( self, name )
 
    def leaveSuite( self, name=None ):
       """Leave a test suite level.
-
       Allow for doctest code."""
       Builder.leaveSuite( self, name )
 
    def addTestCase( self, name ):
-      """Add a test case name. If it's the first of a suite, first print
+      """Add a test case name. If it's the first of a suite, first write
       suite name terminated with newline.
 
-      >>> builder = TextFormatter( sys.stdout )
+      >>> builder = PlainTextWriter( sys.stdout )
       >>> builder.enterSuite( 'Suite' )
       >>> builder.enterSuite( 'Subsuite' )
       >>> builder.addTestCase( 'testThatAddTestCaseBehavesAsExpected' )
@@ -347,82 +368,76 @@ class TextFormatter( Builder ):
       """
       Builder.addTestCase( self, name )
 
-   def printSuiteName( self ):
+   def writeLeader( self ):
+      """Print the report's leader: title."""
+      title = self.formatTitle()
+      if title:
+         print( '{title}'.format( title=title ), file=self.f )
+
+   def writeTrailer( self ):
+      """Print the report's trailer: none."""
+      pass
+
+   def writeSuiteName( self ):
       """Print newline followed by hierarchical suite name.
 
-      >>> builder = TextFormatter( sys.stdout )
+      >>> builder = PlainTextWriter( sys.stdout )
       >>> builder.enterSuite( 'Suite' )
       >>> builder.enterSuite( 'Subsuite' )
-      >>> builder.printSuiteName()
+      >>> builder.writeSuiteName()
       <BLANKLINE>
       Suite.Subsuite
       """
       print( '\n{name}'.format( name=self.formatTestSuiteName() ), file=self.f )
 
-   def printTestCaseName( self, text ):
+   def writeTestCaseName( self, text ):
       """Print testThatThingShowsBehaviour as '- thing shows behaviour'
 
-      >>> builder = TextFormatter( sys.stdout )
-      >>> builder.printTestCaseName( 'testThatThingShowsBehaviour' )
+      >>> builder = PlainTextWriter( sys.stdout )
+      >>> builder.writeTestCaseName( 'testThatThingShowsBehaviour' )
       - Thing shows behaviour.
       """
       print( '- {text}'.format( text=self.formatTestCaseName(text) ), file=self.f )
 
 
 
-class HtmlFormatter( Builder ):
+class SimpleHtmlWriter( Builder ):
    """Output results as HTML.
 
    Tests:
    ------
-   >>> builder = HtmlFormatter( sys.stdout )
+   >>> builder = SimpleHtmlWriter( sys.stdout, Context( title='My Title' ) )
    <html>
    <head>
-   <style>
-   body {  font-family: Consolas,"Bitstream Vera Sans Mono","Courier New",Courier,monospace; }
-   .suite { color:navy; font-size: 120%; font-weight: bold; margin-bottom: 0.3em; }
-   .testcase { margin-top: 0px; }
-   </style>
+   <title>My Title</title>
    </head>
    <body>
+   <h1 class="title">My Title</h1>
    >>> builder.enterSuite( 'Suite' )
    >>> builder.enterSuite( 'Subsuite' )
    >>> builder.addTestCase( 'testThatAddTestCaseBehavesAsExpected' )
-   </ul><p class="suite">Suite.Subsuite</p><ul class="testcase">
+   </ul><h2 class="suite">Suite.Subsuite</h2><ul class="testcase">
    <li>Add test case behaves as expected.</li>
    >>> del builder
    </body>
    </html>
    """
-# TODO (moene#1#): correct <ul>...</ul> balance.
-   def __init__( self, f ):
+   def __init__( self, f, context=Context() ):
       """Constructor."""
-      Builder.__init__( self, f )
-      print( """<html>
-<head>
-<style>
-body {  font-family: Consolas,"Bitstream Vera Sans Mono","Courier New",Courier,monospace; }
-.suite { color:navy; font-size: 120%; font-weight: bold; margin-bottom: 0.3em; }
-.testcase { margin-top: 0px; }
-</style>
-</head>
-<body>""", file=self.f )
+      Builder.__init__( self, f, context )
 
    def __del__( self ):
       """Destructor."""
       Builder.__del__( self )
-      print( '</body>\n</html>', file=self.f )
 
    def enterSuite( self, name ):
       """Enter a new test suite level.
-
       Allow for doctest code.
       """
       Builder.enterSuite( self, name )
 
    def leaveSuite( self, name=None ):
       """Leave a test suite level.
-
       Allow for doctest code."""
       Builder.leaveSuite( self, name )
 
@@ -432,12 +447,28 @@ body {  font-family: Consolas,"Bitstream Vera Sans Mono","Courier New",Courier,m
       """
       Builder.addTestCase( self, name )
 
-   def printSuiteName( self ):
+   def writeLeader( self ):
+      """Print the report's leader: HTML structure with title.
+      """
+      title = self.formatTitle()
+      print( '<html>\n<head>', file=self.f )
+      if title:
+         print( '<title>{title}</title>'.format( title=title ), file=self.f )
+      print( '</head>\n<body>', file=self.f )
+      if title:
+         print( '<h1 class="title">{title}</h1>'.format( title=title ), file=self.f )
+
+   def writeTrailer( self ):
+      """Print the report's trailer: finish HTML document.
+      """
+      print( '</body>\n</html>', file=self.f )
+
+   def writeSuiteName( self ):
       """Print newline followed by hierarchical suite name.
       """
-      print( '</ul><p class="suite">{name}</p><ul class="testcase">'.format( name=self.formatTestSuiteName() ), file=self.f )
+      print( '</ul><h2 class="suite">{name}</h2><ul class="testcase">'.format( name=self.formatTestSuiteName() ), file=self.f )
 
-   def printTestCaseName( self, text ):
+   def writeTestCaseName( self, text ):
       """Print testThatThingShowsBehaviour as '- thing shows behaviour'
       """
       print( '<li>{text}</li>'.format( text=self.formatTestCaseName(text) ), file=self.f )
@@ -468,6 +499,7 @@ def main():
 #   parser.add_option(        "--logging"  , metavar="LEVEL"      , dest="logging"  , default="warning", help="logging level: debug,info,error,critical [warning]" )
    parser.add_option(   "-t", "--selftest" ,  action="store_true" , dest="selftest" , help="perform selftest; can also use option -v" )
 
+   parser.add_option(         "--title"    ,  metavar="TITLE"     , dest="title"    , help="specify title for report [none]" )
    parser.add_option(         "--framework",  metavar="FW"        , dest="framework", help="select test framework: Boost.Test, CppUnit [Boost.Test]" )
    parser.add_option(         "--format"   ,  metavar="FORMAT"    , dest="format"   , help="select output format: html, text [text]" )
    parser.add_option(         "--glob"    ,  metavar="PATTERN"    , dest="glob"     , default="*.cpp|*.h", help="filename pattern to use with directories [*.cpp|*.h]" )
@@ -500,16 +532,16 @@ def main():
       # select output format:
       if options.format:
          if options.format == 'html':
-            BuilderType = HtmlFormatter
+            BuilderType = SimpleHtmlWriter
          elif options.format == 'text':
-            BuilderType = TextFormatter
+            BuilderType = PlainTextWriter
          else:
             parser.error( "invalid format '{fmt}', expecting 'html' or 'text'; try option --help".format( fmt=options.format) )
       else:
-         BuilderType = TextFormatter
+         BuilderType = PlainTextWriter
 
-      builder = BuilderType( sys.stdout )
-      context = Context()
+      context = Context( title=options.title )
+      builder = BuilderType( sys.stdout, context )
 
       for arg in args:
          # directory:

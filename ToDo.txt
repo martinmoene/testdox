@@ -1,0 +1,23 @@
+ToDo for testdox.py
+
+TestDox generates a readable overview of test case names from the specified files.
+
+
+testdox.py
+------------
+- Add option --trimleading to specify word(s) to trim from the start of test names
+  using a regular expression; default (itShould|(prefix_)?[tT]est(That)?)
+
+- Add option --trimtrailing to specify word(s) to trim from the end of test names
+  using a regular expression ; default: Test(s)?
+
+- Add option --bodyonly (implies --format=html) to only generate HTML
+
+- Add option --css=file.css (implies --format=html)
+
+- Add HtmlCssWriter class to control presentation via inline CSS, or CSS file.
+
+Various options were gleaned from http://www.testdox.com/
+
+
+$Id$

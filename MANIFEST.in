@@ -1,3 +1,4 @@
 include testdox.py
 include ChangeLog.txt
+include ToDo.txt
 recursive-include test *.cpp *.h

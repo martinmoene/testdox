@@ -15,6 +15,7 @@
 		<Unit filename="..\..\MANIFEST.in" />
 		<Unit filename="..\..\Readme.txt" />
 		<Unit filename="..\..\Setup.py" />
+		<Unit filename="..\..\ToDo.txt" />
 		<Unit filename="..\..\mk.bat" />
 		<Unit filename="..\..\publish2web.bat" />
 		<Unit filename="..\..\set-pyinstallerpath.bat" />
