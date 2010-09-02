@@ -9,7 +9,6 @@ set     logfile=%progname%.log
 set     webroot=H:\public_html\Home\projects\testdox
 set      websrc=%webroot%\src
 set    localsrc=website\src
-set     webpage=website\content.php
 
 set   testdox_py=testdox.py
 set  testdox_exe=dist\testdox.exe
@@ -52,7 +51,8 @@ copy %testdox_py%   %websrc%  >>%logfile%
 copy %testdox_hpy%  %websrc%  >>%logfile%
 copy %testdox_exe%  %websrc%  >>%logfile%
 copy %testdox_zip%  %websrc%  >>%logfile%
-xcopy /p %webpage%  %webroot%
+xcopy /p website\*.php %webroot%
+xcopy /p website\*.css %webroot%
 endlocal & goto :EOF
 
 ::

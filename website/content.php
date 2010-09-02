@@ -1,4 +1,4 @@
-<h2 id="testdox">TestDox: create simple documentation from test case names</h2>
+<h2 id="testdox">TestDox: create simple documentation from test case names in C++</h2>
 
 <div class="floater">
 <h3 id="downloads">Downloads</h3>
