@@ -55,9 +55,8 @@ but apparently not yet to
 <li><a href="http://www.slideshare.net/sebastian_bergmann/phpunit-best-practices">PHPUnit Best Practices</a>, by <a href="http://sebastian-bergmann.de/">Sebastian Bergmann</a></li>
 <li><a href="http://xspecs.sourceforge.net/protest.html">Protest</a> test framework for Python, by <a href="http://www.natpryce.com/">Nat Pryce</a> (Subversion <a title="Subversion trunk at SourceForge" href="https://xspecs.svn.sourceforge.net/svnroot/xspecs/protest-python/trunk">trunk</a>)</li>
 <li><a href="http://rspec.info/">rSpec</a>, Behaviour Driven Development framework for Ruby.</li>
-<li><a href="http://www.stickyminds.com/pop_print.asp?ObjectId=14973&ObjectType=ART">Programming with GUTs</a> and
-<a href="http://www.stickyminds.com/pop_print.asp?ObjectId=13833&ObjectType=ART">GUT Instinct</a>, by <a href="http://www.curbralan.com/">Kevlin Henney</a></li>
-
+<li><a href="http://www.stickyminds.com/pop_print.asp?ObjectId=13833&ObjectType=ART">Programming with GUTs</a> and
+<a href="http://www.stickyminds.com/pop_print.asp?ObjectId=14973&ObjectType=ART">GUT Instinct</a>, by <a href="http://www.curbralan.com/">Kevlin Henney</a></li>
 </ul></div>
 
 <p>The implementation of TestDox in
@@ -101,10 +100,13 @@ Options:
   -v, --verbose    show more messages
   -q, --quiet      show less messages
   -t, --selftest   perform selftest; can also use option -v
-  --title=TITLE    specify title for report [none]
-  --framework=FW   select test framework: Boost.Test, CppUnit [Boost.Test]
-  --format=FORMAT  select output format: html, text [text]
-  --glob=PATTERN   filename pattern to use with directories [*.cpp|*.h]
+  --title=title    specify title for report [none]
+  --framework=fw   select test framework: Boost.Test, CppUnit [Boost.Test]
+  --format=format  select output format: html, text [text]
+  --glob=pattern   filename pattern to use with directories [*.cpp|*.h]
+  --depth=n        directory recursion depth, norecurse is 1 [recurse]
+  --norecurse      prevent visiting subdirectories [no]
+  --htmlbodyonly   only generate contents of body tag fragment [no]
 </pre>
 
 <h3 id="cppunit">CppUnit example</h3>

@@ -3,6 +3,11 @@ ChangeLog for testdox.py
 TestDox generates a readable overview of test case names from the specified files.
 
 
+0.1.4-alpha  2010-09-03  (martin)
+- ADD: Added option --depth=n to specify directory recursion depth (norecurse == 1 ).
+- ADD: Added option --norecurse to prevent visiting subdirectories.
+- ADD: Added option --htmlbodyonly to only generate contents of body tag fragment.
+
 0.1.3-alpha  2010-09-02  (martin)
 - ADD: Added test/ directory.
 - ADD: Added option --title.

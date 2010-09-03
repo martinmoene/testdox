@@ -11,8 +11,6 @@ testdox.py
 - Add option --trimtrailing to specify word(s) to trim from the end of test names
   using a regular expression ; default: Test(s)?
 
-- Add option --bodyonly (implies --format=html) to only generate HTML
-
 - Add option --css=file.css (implies --format=html)
 
 - Add HtmlCssWriter class to control presentation via inline CSS, or CSS file.

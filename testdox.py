@@ -22,7 +22,7 @@ See also: http://blog.dannorth.net/introducing-bdd/
 
 from __future__ import print_function
 
-__version_info__ = ( 0, 1, 3, 'alpha', 0 )
+__version_info__ = ( 0, 1, 4, 'alpha', 0 )
 __version_date__ = '$Date$'
 __version__      = '$Revision$'
 __author__       = 'Martin Moene <m.j.moene@eld.physics.LeidenUniv.nl>'
@@ -55,8 +55,12 @@ def versionDate():
 
 class Context:
    """Processing context."""
-   def __init__( self, title=None ):
+   def __init__( self, title=None, htmlbodyonly=None ):
       self.title = title
+      self.htmlbodyonly = htmlbodyonly
+
+   def wrapup( self ):
+      pass
 
 
 class Scanner:
@@ -70,10 +74,10 @@ class Scanner:
 class CppUnitKindScanner( Scanner ):
    """Scanner for CppUnit-like C++ unit tests.
    """
-   def __init__( self, f, re_framwork, re_testcase, re_beginsuite, re_endsuite ):
+   def __init__( self, f, re_framework, re_testcase, re_beginsuite, re_endsuite ):
       """Construct from file."""
       self.f = f
-      self.mo_framework  = re.compile( re_framwork )
+      self.mo_framework  = re.compile( re_framework )
       self.mo_testcase   = re.compile( re_testcase )
       self.mo_beginsuite = re.compile( re_beginsuite )
       self.mo_endsuite   = re.compile( re_endsuite )
@@ -120,7 +124,7 @@ class CppUnitScanner( CppUnitKindScanner ):
    def __init__( self, f ):
       """Construct from file."""
       CppUnitKindScanner.__init__( self, f,
-           re_framwork=r'CPPUNIT_',
+          re_framework=r'CPPUNIT_',
            re_testcase=r'CPPUNIT_TEST\s*\(\s*(?P<name>\w+)',
          re_beginsuite=r'CPPUNIT_TEST_SUITE\s*\(\s*(?P<name>\w+)',
            re_endsuite=r'CPPUNIT_TEST_SUITE_END' )
@@ -145,7 +149,7 @@ class CppBoostTestScanner( CppUnitKindScanner ):
    def __init__( self, f ):
       """Construct from file."""
       CppUnitKindScanner.__init__( self, f,
-           re_framwork=r'BOOST_',
+          re_framework=r'BOOST_',
            re_testcase=r'TEST_CASE(_TEMPLATE(_FUNCTION)?)?\s*\(\s*(?P<name>\w+)',
 #           re_testcase=r'(BOOST_TEST_CASE_TEMPLATE(_FUNCTION)?|BOOST_FIXTURE_TEST_CASE|BOOST(_AUTO)?_TEST_CASE)\s*\(\s*(?P<name>\w+)',
          re_beginsuite=r'BOOST_AUTO_TEST_SUITE\s*\(\s*(?P<name>\w+)',
@@ -217,7 +221,8 @@ class Builder:
       """Constructor."""
       self.f = f
       self.context = context
-      self.cases = 0
+      self.caseCount = 0
+      self.suiteCount = 0
       self.suites = []
       self.writeLeader()
 
@@ -243,27 +248,32 @@ class Builder:
 
    def enterSuite( self, name ):
       """Enter a new test suite level."""
-      self.cases = 0
+      self.caseCount = 0
+      self.suiteCount += 1
       self.suites.append( name )
 
    def leaveSuite( self, name=None ):
       """Leave a test suite level."""
       self.suites = self.suites[:-1]
 
-   def testsuiteLevel( self ):
+   def testSuiteLevel( self ):
       """"Level of test suite: outermost is 1."""
       return len( self.suites )
 
-   def testcaseCount( self ):
-      """"Number of test cases in (sub)suite."""
-      return self.cases
+   def testSuiteCount( self ):
+      """"Number of test suite so far."""
+      return self.suiteCount
+
+   def testCaseCount( self ):
+      """"Number of test cases in (sub)suite so far."""
+      return self.caseCount
 
    def addTestCase( self, name ):
       """Add a test case name. If it's the first of a suite, first write
       suite name terminated with newline.
       """
-      self.cases += 1
-      if self.cases == 1:
+      self.caseCount += 1
+      if self.caseCount == 1:
          self.writeSuiteName()
       self.writeTestCaseName( name )
 
@@ -412,16 +422,22 @@ class SimpleHtmlWriter( Builder ):
    <title>My Title</title>
    </head>
    <body>
-   <h1 class="title">My Title</h1>
+   <h1 class="tdx_title">My Title</h1>
    >>> builder.enterSuite( 'Suite' )
    >>> builder.enterSuite( 'Subsuite' )
    >>> builder.addTestCase( 'testThatAddTestCaseBehavesAsExpected' )
-   </ul><h2 class="suite">Suite.Subsuite</h2><ul class="testcase">
+   </ul>
+   <h2 class="tdx_testsuite">Suite.Subsuite</h2><ul class="tdx_testcase">
    <li>Add test case behaves as expected.</li>
    >>> del builder
+   </ul>
    </body>
    </html>
    """
+   css_title_class = 'tdx_title'
+   css_testsuite_class = 'tdx_testsuite'
+   css_testcase_class = 'tdx_testcase'
+
    def __init__( self, f, context=Context() ):
       """Constructor."""
       Builder.__init__( self, f, context )
@@ -450,23 +466,33 @@ class SimpleHtmlWriter( Builder ):
    def writeLeader( self ):
       """Print the report's leader: HTML structure with title.
       """
-      title = self.formatTitle()
-      print( '<html>\n<head>', file=self.f )
-      if title:
-         print( '<title>{title}</title>'.format( title=title ), file=self.f )
-      print( '</head>\n<body>', file=self.f )
-      if title:
-         print( '<h1 class="title">{title}</h1>'.format( title=title ), file=self.f )
+      if not self.context.htmlbodyonly:
+         title = self.formatTitle()
+         print( '<html>\n<head>', file=self.f )
+         if title:
+            print( '<title>{title}</title>'.format( title=title ), file=self.f )
+         print( '</head>\n<body>', file=self.f )
+         if title:
+            print( '<h1 class="{css_title}">{title}</h1>'.format(
+               css_title=SimpleHtmlWriter.css_title_class, title=title ), file=self.f )
 
    def writeTrailer( self ):
       """Print the report's trailer: finish HTML document.
       """
-      print( '</body>\n</html>', file=self.f )
+      if self.testSuiteCount() > 0:
+         print( '</ul>', file=self.f )
+      if not self.context.htmlbodyonly:
+         print( '</body>\n</html>', file=self.f )
 
    def writeSuiteName( self ):
       """Print newline followed by hierarchical suite name.
       """
-      print( '</ul><h2 class="suite">{name}</h2><ul class="testcase">'.format( name=self.formatTestSuiteName() ), file=self.f )
+      if self.testSuiteCount() > 1:
+         print( '</ul>', file=self.f )
+      print( '<h2 class="{css_suite}">{suite_name}</h2><ul class="{css_testcase}">'.format(
+         css_suite=SimpleHtmlWriter.css_testsuite_class,
+         css_testcase=SimpleHtmlWriter.css_testcase_class,
+         suite_name=self.formatTestSuiteName() ), file=self.f )
 
    def writeTestCaseName( self, text ):
       """Print testThatThingShowsBehaviour as '- thing shows behaviour'
@@ -493,21 +519,30 @@ def main():
       version="%prog  {ver} {state}  ({date})".format( ver=versionString(), state=versionState(), date=versionDate() ),
       description=__doc__  )
 
-   parser.add_option(   "-d", "--debug"    ,  action="store_true" , dest="debug"    , help="show debug messages" )
-   parser.add_option(   "-v", "--verbose"  ,  action="store_true" , dest="verbose"  , help="show more messages" )
-   parser.add_option(   "-q", "--quiet"    ,  action="store_true" , dest="quiet"    , help="show less messages" )
-#   parser.add_option(        "--logging"  , metavar="LEVEL"      , dest="logging"  , default="warning", help="logging level: debug,info,error,critical [warning]" )
-   parser.add_option(   "-t", "--selftest" ,  action="store_true" , dest="selftest" , help="perform selftest; can also use option -v" )
+   parser.add_option(   "-d"   , "--debug"    ,  action="store_true" , dest="debug"    , help="show debug messages" )
+   parser.add_option(   "-v"   , "--verbose"  ,  action="store_true" , dest="verbose"  , help="show more messages" )
+   parser.add_option(   "-q"   , "--quiet"    ,  action="store_true" , dest="quiet"    , help="show less messages" )
+#   parser.add_option(           "--logging"  , metavar="LEVEL"      , dest="logging"  , default="warning", help="logging level: debug,info,error,critical [warning]" )
+   parser.add_option(   "-t"   , "--selftest" ,  action="store_true" , dest="selftest" , help="perform selftest; can also use option -v" )
 
-   parser.add_option(         "--title"    ,  metavar="TITLE"     , dest="title"    , help="specify title for report [none]" )
-   parser.add_option(         "--framework",  metavar="FW"        , dest="framework", help="select test framework: Boost.Test, CppUnit [Boost.Test]" )
-   parser.add_option(         "--format"   ,  metavar="FORMAT"    , dest="format"   , help="select output format: html, text [text]" )
-   parser.add_option(         "--glob"    ,  metavar="PATTERN"    , dest="glob"     , default="*.cpp|*.h", help="filename pattern to use with directories [*.cpp|*.h]" )
+   parser.add_option(         "--title"       , metavar="title"      , dest="title"    , help="specify title for report [none]" )
+   parser.add_option(         "--framework"   , metavar="fw"         , dest="framework", help="select test framework: Boost.Test, CppUnit [Boost.Test]" )
+   parser.add_option(         "--format"      , metavar="format"     , dest="format"   , help="select output format: html, text [text]" )
+   parser.add_option(         "--glob"        , metavar="pattern"    , dest="glob"     , default="*.cpp|*.h", help="filename pattern to use with directories [*.cpp|*.h]" )
+   parser.add_option(         "--depth"       , metavar="n"          , dest="depth", type='int', help="directory recursion depth, norecurse is 1 [recurse]" )
+   parser.add_option(         "--norecurse"   ,  action="store_const", dest="depth", const=1   , help="prevent visiting subdirectories [no]" )
+   parser.add_option(         "--htmlbodyonly",  action="store_true" , dest="htmlbodyonly"     , help="only generate contents of body tag fragment [no]" )
 
    (options, args) = parser.parse_args()
 
    if options.selftest:
       exit( doctest.testmod( verbose=options.verbose ) )
+
+   if options.depth <> None and options.depth < 1:
+      parser.error( "expecting 1 or higher for option --depth, got '{depth}'; try option --help".format( depth=options.depth) )
+
+   if options.htmlbodyonly:
+       options.format = 'html'
 
    if len( args ) < 1:
       parser.error( "expecting testsuite filename; try option --help" )
@@ -516,7 +551,9 @@ def main():
       pass
 
    try:
-      filecount = 0;
+      maxdepth = 0
+      dircount = 0
+      filecount = 0
 
       # select scanner for test framework:
       if options.framework:
@@ -525,7 +562,7 @@ def main():
          elif options.framework == 'CppUnit':
             ScannerType = CppUnitScanner
          else:
-            parser.error( "invalid framework '{fw}', expecting 'Boost.Test', or CppUnit; try option --help".format( fw=options.framework) )
+            parser.error( "invalid framework '{fw}' for option --framework, expecting 'Boost.Test', or CppUnit; try option --help".format( fw=options.framework) )
       else:
          ScannerType = CppBoostTestScanner
 
@@ -536,26 +573,40 @@ def main():
          elif options.format == 'text':
             BuilderType = PlainTextWriter
          else:
-            parser.error( "invalid format '{fmt}', expecting 'html' or 'text'; try option --help".format( fmt=options.format) )
+            parser.error( "invalid format '{fmt}' for option --format, expecting 'html' or 'text'; try option --help".format( fmt=options.format) )
       else:
          BuilderType = PlainTextWriter
 
-      context = Context( title=options.title )
+      context = Context( title=options.title, htmlbodyonly=options.htmlbodyonly )
       builder = BuilderType( sys.stdout, context )
 
       for arg in args:
          # directory:
          if os.path.isdir( arg ):
-            for root, dirs, files in os.walk(arg):
+            argroot = arg
+            for dirpath, dirs, files in os.walk( argroot ):
+               recdepth = computeSubDirectoryDistance( argroot, dirpath )
+               maxdepth = max( maxdepth, recdepth )
+#               print( 'depth:{d} top:{ar} dirpath:{dp}'.format( d=recdepth, ar=argroot, dp=dirpath) )
+               # handle --depth=n:
+               if options.depth and recdepth > options.depth:
+                  continue
+               if options.debug:
+                  message( 'at recursion depth:{d}'.format(d=recdepth) )
+               dircount += 1
                for pattern in options.glob.split('|'):
-                  for path in glob.glob( os.path.join(root, pattern ) ):
+                  for path in glob.glob( os.path.join(dirpath, pattern ) ):
                      if options.verbose:
                         message( '{path}:'.format( path=path ) )
                      processFileByPath( path, ScannerType, builder, context )
                      filecount += 1
+               # --norecurse (--depth=1):
+               if options.depth and options.depth <= 1:
+                  break
 
          # filename or wildcard:
          else:
+            dircount += 1  # filter out duplicate dirs from args ?
             for path in glob.glob( arg ):
                if not os.path.isfile( path ):
                   continue
@@ -564,14 +615,21 @@ def main():
                processFileByPath( path, ScannerType, builder, context )
                filecount += 1
 
+      # make sure trailer is written now:
+      # replace with builder.finish(), terminate(), ... ?
+      del builder
+
       if not options.quiet:
          if filecount <= 0:
             message( "no files matched the given file specification(s)." )
          else:
-            message( "{count} file{s} processed.".format( count=filecount, s=(filecount != 1 and 's' or '') ) )
+            message( "processed {dcount} {dirs}, {fcount} {files}.".format(
+               dcount=dircount, dirs=makePlural('directory', dircount),
+               fcount=filecount, files=makePlural('file', filecount) ) )
 
    except IOError as detail:
-      message( "cannot process file '{filename}', {strerror}".format( filename=path, strerror=detail ) )
+      message( "cannot process file '{filename}', {strerror}".format(
+                                      filename=path, strerror=detail ) )
       return 2
    except Exception as detail:
       message( '{0}'.format( detail ) )
@@ -580,6 +638,22 @@ def main():
       pass
 
    return 0
+
+
+def computeSubDirectoryDistance( fromdir, todir ):
+   """Compute the subdirectory level of subdir with respect to topdir."""
+   return 1 + string.count( todir, os.sep ) - string.count( fromdir, os.sep )
+
+
+def makePlural( text, count ):
+   """Return text's pural if appropriate: directory (directories), file (files)."""
+   if count == 1:
+      return text
+   else:
+      if 'y' == text[-1]:
+         return text[:-1] + 'ies'
+      else:
+         return text + 's'
 
 
 def message( msg ):
