@@ -14,10 +14,13 @@
 		<Unit filename="..\..\website\content.php" />
 		<Unit filename="..\..\website\index.php" />
 		<Unit filename="..\..\website\page.php" />
+		<Unit filename="..\..\website\source-highlight-cpp.bat" />
 		<Unit filename="..\..\website\source-highlight-py.bat" />
 		<Unit filename="..\..\website\src\content.php" />
 		<Unit filename="..\..\website\src\index.php" />
 		<Unit filename="..\..\website\src\page.php" />
+		<Unit filename="..\..\website\unittestpp\TestReporterTestDoxStdout.cpp" />
+		<Unit filename="..\..\website\unittestpp\TestReporterTestDoxStdout.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

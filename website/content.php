@@ -59,9 +59,30 @@ but apparently not yet to
 <a href="http://www.stickyminds.com/pop_print.asp?ObjectId=14973&ObjectType=ART">GUT Instinct</a>, by <a href="http://www.curbralan.com/">Kevlin Henney</a></li>
 </ul></div>
 
-<p>The implementation of TestDox in
+<p>Originally, TestDox <em>just</em> created an overview of the test suites and
+their test cases: it documents the design under test. Now test frameworks may
+be able to create the overview as part of the test run and also indicate the
+test's success or failure as in:
+<span style="font-family:Consolas"><p>CustomerLookup</p>
+<ul>
+<li>[x] finds customer by id</li>
+<li>[&nbsp;] fails for duplicate customers</li>
+</ul></span>
+See for example PHPUnit,
+<a href="http://www.phpunit.de/manual/3.5/en/other-uses-for-tests.html">Other
+Uses for Tests: Agile Documentation</a>. Although I don't know of any C++ test
+frameworks that provide TestDox reporting off-the-shelf, many frameworks may
+support it via customization of their reporting mechanism. Below I intend to
+present <a href="index.php#FrameworkCustomization">several examples of such
+customization</a>. In case you cannot create the TestDox report from your test
+framework, or do not want to do so, the Python TestDox script presented here
+may be of help.
+</p>
+
+<h3>Python TestDox script</h3>
+<p>The
 <a title="Python at Wikipedia" href="http://en.wikipedia.org/wiki/Python_%28programming_language%29">Python</a>
-presented here was created for use with the C++ test frameworks
+TestDox script was initially created for use with the C++ test frameworks
 <a title="Test at Boost" href="http://www.boost.org/doc/libs/release/libs/test/">Boost.Test</a> and
 <a title="CppUnit at Wikipedia" href="http://en.wikipedia.org/wiki/CppUnit">CppUnit</a>.
 It is distributed under the <a title="about the license at Boost.org" href="http://www.boost.org/users/license.html">Boost</a>
@@ -209,3 +230,108 @@ Core.String
 - format: String is correctly formatted.
 </pre>
 
+<h3><a name="FrameworkCustomization"></a>Framework customization</h3>
+
+<h4>UnitTest++</h4>
+<p>Resources</p>
+<ul>
+<li><a href="http://code.google.com/p/unittestpp/">UnitTest++ on Google Code</a>,
+svn <a href="http://unittestpp.googlecode.com/svn/">repository</a></li>
+<li><a href="http://unittest-cpp.sourceforge.net//">UnitTest++ on SourceForge</a></li>
+</ul>
+
+<p>TestReporterTestDoxStdout.h</p>
+<pre>
+#ifndef UNITTEST_TESTREPORTERTESTDOXSTDOUT_H
+#define UNITTEST_TESTREPORTERTESTDOXSTDOUT_H
+
+#include "TestReporter.h"
+#include &lt;string&gt;
+
+namespace UnitTest {
+
+class TestReporterTestDoxStdout : public TestReporter
+{
+private:
+    virtual void ReportTestStart(TestDetails const&amp; test);
+    virtual void ReportFailure(TestDetails const&amp; test, char const* failure);
+
+    virtual void ReportTestFinish(TestDetails const&amp; test, float secondsElapsed);
+    virtual void ReportSummary(int totalTestCount, int failedTestCount, int failureCount, float secondsElapsed);
+
+    void ReportTestResult(TestDetails const &amp;test, bool success);
+
+    std::string m_suiteName;
+};
+
+}
+
+#endif
+</pre>
+
+<p>TestReporterTestDoxStdout.cpp</p>
+<pre>
+#include "TestReporterTestDoxStdout.h"
+#include &lt;cstdio&gt;
+
+#include "TestDetails.h"
+
+namespace UnitTest {
+
+const char const* to_cstr(std::string const&amp; text)
+{
+   return text.c_str();
+}
+
+std::string splitCamelCaseWord(std::string const&amp; text)
+{
+   std::string sentence;
+   for ( std::string::const_iterator pos = text.begin(); pos != text.end(); ++pos)
+   {
+      if (isupper(*pos) &amp;&amp; pos != text.begin())
+      {
+         sentence.append(1, ' ');
+      }
+      if (pos == text.begin())
+      {
+         sentence.append(1, *pos);
+      }
+      else
+      {
+         sentence.append(1, tolower(*pos));
+      }
+   }
+   return sentence;
+}
+
+void TestReporterTestDoxStdout::ReportTestResult(TestDetails const &amp;test, bool success)
+{
+   if (test.suiteName != m_suiteName)
+   {
+      m_suiteName = test.suiteName;
+      printf("\n%s\n", to_cstr(m_suiteName));
+   }
+   printf(" [%c] %s\n", success ? 'x':' ', to_cstr(splitCamelCaseWord(test.testName)));
+}
+
+void TestReporterTestDoxStdout::ReportFailure(TestDetails const&amp; test, char const* /*failure*/)
+{
+   ReportTestResult(test, false);
+}
+
+void TestReporterTestDoxStdout::ReportTestStart(TestDetails const&amp; /*test*/)
+{
+}
+
+void TestReporterTestDoxStdout::ReportTestFinish(TestDetails const& test, float)
+{
+   ReportTestResult(test, true);
+}
+
+void TestReporterTestDoxStdout::ReportSummary(int const /*totalTestCount*/, int const /*failedTestCount*/,
+                                       int const /*failureCount*/, float /*secondsElapsed*/)
+{
+}
+
+}
+</pre>

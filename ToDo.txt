@@ -5,6 +5,10 @@ TestDox generates a readable overview of test case names from the specified file
 
 testdox.py
 ------------
+- Add scanner for Google Test, http://code.google.com/p/googletest/
+  TEST(test_case_name, test_name), TEST_F(test_case_name, test_name),
+  TEST(FactorialTest, HandlesZeroInput), TEST_F(QueueTest, IsEmptyInitially).
+
 - Add option --trimleading to specify word(s) to trim from the start of test names
   using a regular expression; default (itShould|(prefix_)?[tT]est(That)?)
 

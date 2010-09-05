@@ -15,6 +15,10 @@
 # $Id$
 #
 
+#
+# See also Kodos - The Python Regex Debugger, http://kodos.sourceforge.net/.
+#
+
 """Create test documentation from testsuite files based on testdox format.
 
 See also: http://blog.dannorth.net/introducing-bdd/
@@ -112,7 +116,8 @@ class CppUnitKindScanner( Scanner ):
 
 class CppUnitScanner( CppUnitKindScanner ):
    """Scanner for CppUnit C++ unit tests.
-   See also Kodos - The Python Regex Debugger, http://kodos.sourceforge.net/.
+
+   URL: http://cppunit.sourceforge.net/
 
    CPPUNIT_TEST_SUITE (suite_name)
    CPPUNIT_TEST_SUITE_END ()
@@ -132,7 +137,8 @@ class CppUnitScanner( CppUnitKindScanner ):
 
 class CppBoostTestScanner( CppUnitKindScanner ):
    """Scanner for Boost.Test C++ unit tests.
-   See also Kodos - The Python Regex Debugger, http://kodos.sourceforge.net/.
+
+   URL: http://www.boost.org/doc/libs/release/libs/test/
 
    BOOST_AUTO_TEST_SUITE( suite_name )
    BOOST_AUTO_TEST_SUITE_END()
@@ -155,6 +161,16 @@ class CppBoostTestScanner( CppUnitKindScanner ):
          re_beginsuite=r'BOOST_AUTO_TEST_SUITE\s*\(\s*(?P<name>\w+)',
            re_endsuite=r'BOOST_AUTO_TEST_SUITE_END' )
 
+
+class CppGoogleTestScanner( Scanner ):
+   """Scanner for Google Test C++ unit tests.
+
+   URL: http://code.google.com/p/googletest/
+
+   TEST(test_case_name, test_name), e.g. TEST(FactorialTest, HandlesZeroInput),
+   TEST_F(test_case_name, test_name), e.g. TEST_F(QueueTest, IsEmptyInitially).
+   """
+   pass
 
 class Parser:
    """Parser for testsuites. This one works with Boost.Test testsuite,
@@ -561,8 +577,10 @@ def main():
             ScannerType = CppBoostTestScanner
          elif options.framework == 'CppUnit':
             ScannerType = CppUnitScanner
+         elif options.framework == 'GoogleTest':
+            ScannerType = CppGoogleTestScanner
          else:
-            parser.error( "invalid framework '{fw}' for option --framework, expecting 'Boost.Test', or CppUnit; try option --help".format( fw=options.framework) )
+            parser.error( "invalid framework '{fw}' for option --framework, expecting 'Boost.Test', CppUnit, or GoogleTest; try option --help".format( fw=options.framework) )
       else:
          ScannerType = CppBoostTestScanner
 
