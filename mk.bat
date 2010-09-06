@@ -23,11 +23,15 @@ if [%1] == [dist] (
 if [%1] == [sdist] (
    call :DoSdist
 ) else (
+if [%1] == [compile] (
+   call :DoCompile
+) else (
    echo Usage: %0 [dist ^| sdist]
    echo.
-   echo - mk dist  creates a single-file executable %basename%.exe
-   echo - mk sdist  creates a Python source distribution of %basename%.py
-) )
+   echo - mk dist    creates a single-file executable %basename%.exe
+   echo - mk sdist   creates a Python source distribution of %basename%.py
+   echo - mk compile compiles C++ framework code
+) ) )
 
 :EndProcessArgs
 endlocal & goto :EOF
@@ -57,6 +61,11 @@ endlocal & goto :EOF
 
 :DoSdist
 python Setup.py sdist --dist-dir=.
+endlocal & goto :EOF
+
+:DoCompile
+cd website\boosttest
+call mk
 endlocal & goto :EOF
 
 ::

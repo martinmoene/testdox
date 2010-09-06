@@ -230,9 +230,15 @@ Core.String
 
 <h3><a name="FrameworkCustomization"></a>Framework customization</h3>
 
+<h4>Boost.Test</h4>
+<ul>
+<li><a href="boosttest/">View customization</a></li>
+<li><a href="http://www.boost.org/doc/libs/release/libs/test/">Boost.Test at Boost</a>
+</ul>
+
 <h4>UnitTest++</h4>
 <ul>
-<li><a href="unittestpp/">view customization</a></li>
+<li><a href="unittestpp/">View customization</a></li>
 <li><a href="http://code.google.com/p/unittestpp/">UnitTest++ on Google Code</a>,
 svn <a href="http://unittestpp.googlecode.com/svn/">repository</a></li>
 <li><a href="http://unittest-cpp.sourceforge.net//">UnitTest++ on SourceForge</a></li>

@@ -21,7 +21,7 @@ std::string splitCamelCaseWord(std::string const& text)
       }
       if (pos == text.begin())
       {
-         sentence.append(1, *pos);
+         sentence.append(1, toupper(*pos));
       }
       else
       {

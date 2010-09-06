@@ -11,6 +11,12 @@
 				<Option compiler="gcc" />
 			</Target>
 		</Build>
+		<Unit filename="..\..\website\boosttest\index.php" />
+		<Unit filename="..\..\website\boosttest\main.cpp" />
+		<Unit filename="..\..\website\boosttest\page.css" />
+		<Unit filename="..\..\website\boosttest\page.php" />
+		<Unit filename="..\..\website\boosttest\testdox_log_formatter.hpp" />
+		<Unit filename="..\..\website\boosttest\testdox_log_formatter.ipp" />
 		<Unit filename="..\..\website\content.php" />
 		<Unit filename="..\..\website\index.php" />
 		<Unit filename="..\..\website\page.php" />
@@ -23,6 +29,7 @@
 		<Unit filename="..\..\website\unittestpp\TestReporterTestDoxStdout.cpp" />
 		<Unit filename="..\..\website\unittestpp\TestReporterTestDoxStdout.h" />
 		<Unit filename="..\..\website\unittestpp\index.php" />
+		<Unit filename="..\..\website\unittestpp\page.css" />
 		<Unit filename="..\..\website\unittestpp\page.php" />
 		<Extensions>
 			<code_completion />

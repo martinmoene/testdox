@@ -30,8 +30,9 @@ if not exist MANIFEST (
    goto :EOF
 )
 
-call :HighlightPy  website\src         %testdox_py%
-call :HighlightCpp website\unittestpp  main.cpp TestReporterTestDoxStdout.h TestReporterTestDoxStdout.cpp
+call :HighlightPy  website\src %testdox_py%
+call :HighlightCpp UnitTest++  website\unittestpp  main.cpp TestReporterTestDoxStdout.h TestReporterTestDoxStdout.cpp
+call :HighlightCpp Boost.Test  website\boosttest   output.bat main.cpp testdox_log_formatter.hpp testdox_log_formatter.cpp testdox_log_formatter.ipp
 call :CopyToWeb
 endlocal & goto :EOF
 
@@ -48,14 +49,22 @@ for %%f in ( %files% ) do (
 endlocal & goto :EOF
 
 :HighlightCpp
-set dir=%1
-set files=%2 %3 %4 %5 %6
+set fw=%1
+set dir=%2
+set files=%3 %4 %5 %6 %7 %8 %9
 echo Creating highlighted source in subdirectory %dir%.
 echo Creating highlighted source in subdirectory %dir% >>%logfile%
-echo ^<h2 id="unittest"^>UnitTest++ TestDox reporter customization^</h2^>  >%dir%\content.php
+echo ^<h2^>%fw% TestDox reporter customization^</h2^>  >%dir%\content.php
 for %%f in ( %files% ) do (
-   echo ^<h3^>%%~nxf:^</h3^>  >>%dir%\content.php
-   %highlight_cpp% %dir%\%%f  >>%dir%\content.php
+   if [%%~nxf] == [output.bat] (
+      echo ^<h3^>%%~nf:^</h3^>  >>%dir%\content.php
+      echo ^<pre^>    >>%dir%\content.php
+      call %dir%\%%f  >>%dir%\content.php  2>&1
+      echo ^</pre^>   >>%dir%\content.php
+   ) else (
+      echo ^<h3^>%%~nxf:^</h3^>  >>%dir%\content.php
+      %highlight_cpp% %dir%\%%f  >>%dir%\content.php
+   )
 )
 endlocal & goto :EOF
 
@@ -76,10 +85,16 @@ copy %testdox_hpy%  %websrc%  >>%logfile%
 copy %testdox_exe%  %websrc%  >>%logfile%
 copy %testdox_zip%  %websrc%  >>%logfile%
 
-echo Copying files to subdirectory %webroot%\website\unittestpp\
-echo Copying files to subdirectory %webroot%\website\unittestpp\ >>%logfile%
-xcopy /y website\unittestpp\*.php %webroot%\unittestpp\  >>%logfile%
-xcopy /y website\unittestpp\*.css %webroot%\unittestpp\  >>%logfile%
+echo Copying files to subdirectory %webroot%\unittestpp\
+echo Copying files to subdirectory %webroot%\unittestpp\  >>%logfile%
+xcopy /y website\unittestpp\*.php  %webroot%\unittestpp\  >>%logfile%
+xcopy /y website\unittestpp\*.css  %webroot%\unittestpp\  >>%logfile%
+
+echo Copying files to subdirectory %webroot%\boosttest\
+echo Copying files to subdirectory %webroot%\boosttest\  >>%logfile%
+xcopy /y website\boosttest\*.php   %webroot%\boosttest\  >>%logfile%
+xcopy /y website\boosttest\*.css   %webroot%\boosttest\  >>%logfile%
+
 endlocal & goto :EOF
 
 ::

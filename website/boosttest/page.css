@@ -1,0 +1,10 @@
+a#Rulbus {
+   color: #f60;
+}
+
+div#toc a {
+   font-size: xx-small;
+   voice-family: "\"}\"";
+   voice-family: inherit;
+   font-size: x-small;
+}
