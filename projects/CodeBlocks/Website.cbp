@@ -13,8 +13,11 @@
 		</Build>
 		<Unit filename="..\..\website\boosttest\index.php" />
 		<Unit filename="..\..\website\boosttest\main.cpp" />
+		<Unit filename="..\..\website\boosttest\mk.bat" />
+		<Unit filename="..\..\website\boosttest\output.bat" />
 		<Unit filename="..\..\website\boosttest\page.css" />
 		<Unit filename="..\..\website\boosttest\page.php" />
+		<Unit filename="..\..\website\boosttest\testdox_log_formatter.cpp" />
 		<Unit filename="..\..\website\boosttest\testdox_log_formatter.hpp" />
 		<Unit filename="..\..\website\boosttest\testdox_log_formatter.ipp" />
 		<Unit filename="..\..\website\content.php" />
