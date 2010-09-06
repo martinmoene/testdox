@@ -30,29 +30,41 @@ if not exist MANIFEST (
    goto :EOF
 )
 
-call :Highlight %testdox_py% %testdox_hpy%
-call :HighlightCpp website\unittestpp
+call :HighlightPy  website\src         %testdox_py%
+call :HighlightCpp website\unittestpp  main.cpp TestReporterTestDoxStdout.h TestReporterTestDoxStdout.cpp
 call :CopyToWeb
 endlocal & goto :EOF
 
-:Highlight
-set input=%1
-set output=%2
-echo Creating highlighted source in subdirectory %localsrc%.
-echo Creating highlighted source in subdirectory %localsrc% >>%logfile%
-echo ^<h2 id="testdox"^>TestDox: create simple documentation from test case names^</h2^>  >%output%
-%highlight_py% %input% >>%output%
+:HighlightPy
+set dir=%1
+set files=%2 %3 %4 %5 %6
+echo Creating highlighted source in subdirectory %dir%.
+echo Creating highlighted source in subdirectory %dir% >>%logfile%
+echo ^<h2 id="testdox"^>TestDox: create simple documentation from test case names^</h2^>  >%dir%\content.php
+for %%f in ( %files% ) do (
+::   echo ^<h3^>%%~nxf:^</h3^>  >>%dir%\content.php
+   %highlight_py% %%f   >>%dir%\content.php
+)
 endlocal & goto :EOF
 
 :HighlightCpp
 set dir=%1
+set files=%2 %3 %4 %5 %6
 echo Creating highlighted source in subdirectory %dir%.
 echo Creating highlighted source in subdirectory %dir% >>%logfile%
-echo ^<h2 id="unittest"^>UnitTest++ TestDox reporter customizatin^</h2^>  >%dir%\content.php
-for %%f in (%dir%\*.h %dir%\*.cpp) do %highlight_cpp% %%f >>%dir%\content.php
+echo ^<h2 id="unittest"^>UnitTest++ TestDox reporter customization^</h2^>  >%dir%\content.php
+for %%f in ( %files% ) do (
+   echo ^<h3^>%%~nxf:^</h3^>  >>%dir%\content.php
+   %highlight_cpp% %dir%\%%f  >>%dir%\content.php
+)
 endlocal & goto :EOF
 
 :CopyToWeb
+echo Copying files to subdirectory %webroot%
+echo Copying files to subdirectory %webroot% >>%logfile%
+xcopy /y website\*.php %webroot%  >>%logfile%
+xcopy /y website\*.css %webroot%  >>%logfile%
+
 echo Copying files to subdirectory %websrc%
 echo Copying files to subdirectory %websrc% >>%logfile%
 xcopy /y/s %localsrc%   %websrc%\ >>%logfile%
@@ -63,8 +75,11 @@ copy %testdox_py%   %websrc%  >>%logfile%
 copy %testdox_hpy%  %websrc%  >>%logfile%
 copy %testdox_exe%  %websrc%  >>%logfile%
 copy %testdox_zip%  %websrc%  >>%logfile%
-xcopy /p website\*.php %webroot%
-xcopy /p website\*.css %webroot%
+
+echo Copying files to subdirectory %webroot%\website\unittestpp\
+echo Copying files to subdirectory %webroot%\website\unittestpp\ >>%logfile%
+xcopy /y website\unittestpp\*.php %webroot%\unittestpp\  >>%logfile%
+xcopy /y website\unittestpp\*.css %webroot%\unittestpp\  >>%logfile%
 endlocal & goto :EOF
 
 ::

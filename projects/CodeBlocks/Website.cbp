@@ -19,8 +19,11 @@
 		<Unit filename="..\..\website\src\content.php" />
 		<Unit filename="..\..\website\src\index.php" />
 		<Unit filename="..\..\website\src\page.php" />
+		<Unit filename="..\..\website\unittestpp\Main.cpp" />
 		<Unit filename="..\..\website\unittestpp\TestReporterTestDoxStdout.cpp" />
 		<Unit filename="..\..\website\unittestpp\TestReporterTestDoxStdout.h" />
+		<Unit filename="..\..\website\unittestpp\index.php" />
+		<Unit filename="..\..\website\unittestpp\page.php" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -14,11 +14,10 @@
 <p>Simple ideas can be powerful. TestDox is based on such an idea: <em>Test method
 names should be sentences</em>. Using this convention, TestDox can generate a readable overview of
 your <a title="Unit testing at Wikipedia" href="http://en.wikipedia.org/wiki/Unit_test">tests</a>, as in:</p>
-<span style="font-family:Consolas"><p>CustomerLookup</p>
-<ul>
-<li>finds customer by id</li>
-<li>fails for duplicate customers</li>
-</ul></span>
+<span style="font-family:Consolas"><p>CustomerLookup<br>
+&emsp;&ndash;&nbsp;finds customer by id<br>
+&emsp;&ndash;&nbsp;fails for duplicate customers<br>
+</span>
 
 <p>It was Chris Stevenson's idea to present the
 <a title="Camel case at Wikipedia" href="http://en.wikipedia.org/wiki/Camel_case">camel case</a> method names in
@@ -59,16 +58,15 @@ but apparently not yet to
 <a href="http://www.stickyminds.com/pop_print.asp?ObjectId=14973&ObjectType=ART">GUT Instinct</a>, by <a href="http://www.curbralan.com/">Kevlin Henney</a></li>
 </ul></div>
 
-<p>Originally, TestDox <em>just</em> created an overview of the test suites and
-their test cases: it documents the design under test. Now test frameworks may
-be able to create the overview as part of the test run and also indicate the
-test's success or failure as in:
-<span style="font-family:Consolas"><p>CustomerLookup</p>
-<ul>
-<li>[x] finds customer by id</li>
-<li>[&nbsp;] fails for duplicate customers</li>
-</ul></span>
-See for example PHPUnit,
+<p>The original Java TestDox <em>just</em> creates an overview of the test
+suites and their test cases: it documents the evolving design and code in an
+agile way. To date test frameworks may be able to create the overview as part
+of the test run and also indicate the test's success or failure as in:</p>
+<span style="font-family:Consolas"><p>CustomerLookup<br>
+&emsp;[x] finds customer by id<br>
+&emsp;[&nbsp;] fails for duplicate customers<br>
+</span></p>
+<p>See for example PHPUnit,
 <a href="http://www.phpunit.de/manual/3.5/en/other-uses-for-tests.html">Other
 Uses for Tests: Agile Documentation</a>. Although I don't know of any C++ test
 frameworks that provide TestDox reporting off-the-shelf, many frameworks may
@@ -233,105 +231,9 @@ Core.String
 <h3><a name="FrameworkCustomization"></a>Framework customization</h3>
 
 <h4>UnitTest++</h4>
-<p>Resources</p>
 <ul>
+<li><a href="unittestpp/">view customization</a></li>
 <li><a href="http://code.google.com/p/unittestpp/">UnitTest++ on Google Code</a>,
 svn <a href="http://unittestpp.googlecode.com/svn/">repository</a></li>
 <li><a href="http://unittest-cpp.sourceforge.net//">UnitTest++ on SourceForge</a></li>
 </ul>
-
-<p>TestReporterTestDoxStdout.h</p>
-<pre>
-#ifndef UNITTEST_TESTREPORTERTESTDOXSTDOUT_H
-#define UNITTEST_TESTREPORTERTESTDOXSTDOUT_H
-
-#include "TestReporter.h"
-#include &lt;string&gt;
-
-namespace UnitTest {
-
-class TestReporterTestDoxStdout : public TestReporter
-{
-private:
-    virtual void ReportTestStart(TestDetails const&amp; test);
-    virtual void ReportFailure(TestDetails const&amp; test, char const* failure);
-
-    virtual void ReportTestFinish(TestDetails const&amp; test, float secondsElapsed);
-    virtual void ReportSummary(int totalTestCount, int failedTestCount, int failureCount, float secondsElapsed);
-
-    void ReportTestResult(TestDetails const &amp;test, bool success);
-
-    std::string m_suiteName;
-};
-
-}
-
-#endif
-</pre>
-
-<p>TestReporterTestDoxStdout.cpp</p>
-<pre>
-#include "TestReporterTestDoxStdout.h"
-#include &lt;cstdio&gt;
-
-#include "TestDetails.h"
-
-namespace UnitTest {
-
-const char const* to_cstr(std::string const&amp; text)
-{
-   return text.c_str();
-}
-
-std::string splitCamelCaseWord(std::string const&amp; text)
-{
-   std::string sentence;
-   for ( std::string::const_iterator pos = text.begin(); pos != text.end(); ++pos)
-   {
-      if (isupper(*pos) &amp;&amp; pos != text.begin())
-      {
-         sentence.append(1, ' ');
-      }
-      if (pos == text.begin())
-      {
-         sentence.append(1, *pos);
-      }
-      else
-      {
-         sentence.append(1, tolower(*pos));
-      }
-   }
-   return sentence;
-}
-
-void TestReporterTestDoxStdout::ReportTestResult(TestDetails const &amp;test, bool success)
-{
-   if (test.suiteName != m_suiteName)
-   {
-      m_suiteName = test.suiteName;
-      printf("\n%s\n", to_cstr(m_suiteName));
-   }
-   printf(" [%c] %s\n", success ? 'x':' ', to_cstr(splitCamelCaseWord(test.testName)));
-}
-
-void TestReporterTestDoxStdout::ReportFailure(TestDetails const&amp; test, char const* /*failure*/)
-{
-   ReportTestResult(test, false);
-}
-
-void TestReporterTestDoxStdout::ReportTestStart(TestDetails const&amp; /*test*/)
-{
-}
-
-void TestReporterTestDoxStdout::ReportTestFinish(TestDetails const& test, float)
-{
-   ReportTestResult(test, true);
-}
-
-void TestReporterTestDoxStdout::ReportSummary(int const /*totalTestCount*/, int const /*failedTestCount*/,
-                                       int const /*failureCount*/, float /*secondsElapsed*/)
-{
-}
-
-}
-</pre>
