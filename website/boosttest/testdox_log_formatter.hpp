@@ -20,11 +20,13 @@ namespace unit_test {
 namespace output {
 
 // ************************************************************************** //
-// **************             testdox_log_formatter           ************** //
+// **************             testdox_log_formatter            ************** //
 // ************************************************************************** //
 
 class BOOST_TEST_DECL testdox_log_formatter : public unit_test_log_formatter {
 public:
+    testdox_log_formatter();
+
     // Formatter interface
     void    log_start( std::ostream&, counter_t test_cases_amount );
     void    log_finish( std::ostream& );
@@ -41,8 +43,19 @@ public:
     void    log_entry_value( std::ostream&, lazy_ostream const& value );
     void    log_entry_finish( std::ostream& );
 
+    void    set_testname_prefix( std::string text );
+    void    set_testname_postfix( std::string text );
+
 protected:
     virtual void    print_prefix( std::ostream&, const_string file, std::size_t line );
+
+/// TODO (Martin#1#): change to const_string / property  ?
+    virtual std::string   testdox_log_formatter::to_sentence( std::string text );
+
+private:
+/// TODO (Martin#1#): change to const_string / property ?
+    std::string m_testname_prefixes;
+    std::string m_testname_postfixes;
 };
 
 } // namespace output

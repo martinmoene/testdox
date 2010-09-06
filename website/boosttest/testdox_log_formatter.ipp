@@ -31,41 +31,45 @@ namespace output {
 
 namespace {
 
-std::string to_sentence( std::string text )
+inline std::string
+strip_left( std::string text, std::string to_strip )
 {
-   if ( 0 == text.find( "testThat" ) )
-   {
-      text.erase( 0, 8 );
-   }
-   else if ( 0 == text.find( "test" ) )
-   {
-      text.erase( 0, 4 );
-   }
+    if ( 0 == text.find( to_strip ) )
+    {
+       text.erase( 0, to_strip.length() );
+    }
 
-   std::string sentence;
-   for ( std::string::const_iterator pos = text.begin(); pos != text.end(); ++pos)
-   {
-      if ( isupper(*pos) && pos != text.begin() )
-      {
-         sentence.append( 1, ' ');
-      }
-      if ( pos == text.begin() )
-      {
-         sentence.append( 1, toupper(*pos) );
-      }
-      else
-      {
-         sentence.append( 1, tolower(*pos) );
-      }
-   }
-   return sentence;
+   return text;
+}
+
+inline std::string
+strip_right( std::string text, std::string to_strip )
+{
+    std::size_t pos = text.find( to_strip );
+
+    if ( pos + to_strip.length() == text.length() )
+    {
+       text.erase( pos, to_strip.length() );
+    }
+
+    return text;
 }
 
 } // local, anonymous namespace
 
 // ************************************************************************** //
-// **************            testdox_log_formatter            ************** //
+// **************            testdox_log_formatter             ************** //
 // ************************************************************************** //
+
+// weakness: must specify term that is prefix of another term after the latter.
+
+testdox_log_formatter::testdox_log_formatter()
+: m_testname_prefixes( "itShould|testThat|test|")
+, m_testname_postfixes( "Tests|Test")
+{
+}
+
+//____________________________________________________________________________//
 
 void
 testdox_log_formatter::log_start( std::ostream& output, counter_t test_cases_amount )
@@ -186,6 +190,66 @@ void
 testdox_log_formatter::print_prefix( std::ostream& output, const_string file, std::size_t line )
 {
     output << " ";
+}
+
+//____________________________________________________________________________//
+
+void
+testdox_log_formatter::set_testname_prefix( std::string text )
+{
+    m_testname_prefixes = text;
+}
+
+//____________________________________________________________________________//
+
+void
+testdox_log_formatter::set_testname_postfix( std::string text )
+{
+    m_testname_postfixes = text;
+}
+
+//____________________________________________________________________________//
+
+
+std::string
+testdox_log_formatter::to_sentence( std::string text )
+{
+//    for each prefix in m_testname_prefixes:
+//        if match prefix in text:
+//            strip_left( text, prefix )
+//            break;  // oly once
+//
+//    for each postfix in m_testname_postfixes:
+//        if match prefix in text:
+//            strip_left( text, prefix )
+//            break;  // oly once
+
+   if ( 0 == text.find( "testThat" ) )
+   {
+      text = strip_left( text, "testThat" );
+   }
+   else if ( 0 == text.find( "test" ) )
+   {
+      text = strip_left( text, "test" );
+   }
+
+   std::string sentence;
+   for ( std::string::const_iterator pos = text.begin(); pos != text.end(); ++pos)
+   {
+      if ( isupper(*pos) && pos != text.begin() )
+      {
+         sentence.append( 1, ' ');
+      }
+      if ( pos == text.begin() )
+      {
+         sentence.append( 1, toupper(*pos) );
+      }
+      else
+      {
+         sentence.append( 1, tolower(*pos) );
+      }
+   }
+   return sentence;
 }
 
 //____________________________________________________________________________//
