@@ -8,7 +8,10 @@ set     logfile=%progname%.log
 
 set     webroot=H:\public_html\Home\projects\testdox
 set      websrc=%webroot%\src
+set   weboutput=%webroot%\output
+
 set    localsrc=website\src
+set localoutput=website\output
 
 set   testdox_py=testdox.py
 set  testdox_exe=dist\testdox.exe
@@ -84,6 +87,10 @@ copy %testdox_py%   %websrc%  >>%logfile%
 copy %testdox_hpy%  %websrc%  >>%logfile%
 copy %testdox_exe%  %websrc%  >>%logfile%
 copy %testdox_zip%  %websrc%  >>%logfile%
+
+echo Copying files to subdirectory %weboutput%
+echo Copying files to subdirectory %weboutput% >>%logfile%
+xcopy /y/s %localoutput%   %weboutput%\ >>%logfile%
 
 echo Copying files to subdirectory %webroot%\unittestpp\
 echo Copying files to subdirectory %webroot%\unittestpp\  >>%logfile%

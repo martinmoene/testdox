@@ -22,6 +22,12 @@
 		<Unit filename="..\..\website\boosttest\testdox_log_formatter.ipp" />
 		<Unit filename="..\..\website\content.php" />
 		<Unit filename="..\..\website\index.php" />
+		<Unit filename="..\..\website\output\boosttest\content.php" />
+		<Unit filename="..\..\website\output\boosttest\index.php" />
+		<Unit filename="..\..\website\output\boosttest\page.php" />
+		<Unit filename="..\..\website\output\cppunit\content.php" />
+		<Unit filename="..\..\website\output\cppunit\index.php" />
+		<Unit filename="..\..\website\output\cppunit\page.php" />
 		<Unit filename="..\..\website\page.php" />
 		<Unit filename="..\..\website\source-highlight-cpp.bat" />
 		<Unit filename="..\..\website\source-highlight-py.bat" />

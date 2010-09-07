@@ -292,6 +292,7 @@ std::string
 testdox_log_formatter::camelcase_to_sentence( std::string const& text )
 {
 // TODO (moene#1#): Use std::copy() with insert iterator ?
+// TODO (moene#1#): Handle _: a123_bcde, a123_Bcde; produce single space
 
     std::string sentence;
     for ( std::string::const_iterator pos = text.begin(); pos != text.end(); ++pos)

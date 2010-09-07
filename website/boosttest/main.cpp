@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE( itShouldReportSpaceWhenItThrows )
 
 //____________________________________________________________________________//
 
-BOOST_AUTO_TEST_SUITE( MySuiteTest )
+BOOST_AUTO_TEST_SUITE( MySuiteTests )
 
 BOOST_AUTO_TEST_CASE( passingTestInMySuiteReportsXTest )
 {
