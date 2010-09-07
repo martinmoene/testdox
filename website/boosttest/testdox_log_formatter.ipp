@@ -64,9 +64,9 @@ strip_right( std::string text, std::string to_strip )
 // weakness: must specify term that is prefix of another term after the latter.
 
 testdox_log_formatter::testdox_log_formatter()
-: m_testname_prefixes( "itShould|testThat|test|")
-, m_testname_postfixes( "Tests|Test")
 {
+    set_testname_prefixes( "itShould|testThat|test|" );
+    set_testname_postfixes( "Tests|Test" );
 }
 
 //____________________________________________________________________________//
@@ -195,17 +195,22 @@ testdox_log_formatter::print_prefix( std::ostream& output, const_string file, st
 //____________________________________________________________________________//
 
 void
-testdox_log_formatter::set_testname_prefix( std::string text )
+testdox_log_formatter::set_testname_prefixes( std::string text )
 {
-    m_testname_prefixes = text;
+    m_prefixes.clear();
+    m_prefixes.push_back( "itShould" );
+    m_prefixes.push_back( "testThat" );
+    m_prefixes.push_back( "test" );
 }
 
 //____________________________________________________________________________//
 
 void
-testdox_log_formatter::set_testname_postfix( std::string text )
+testdox_log_formatter::set_testname_postfixes( std::string text )
 {
-    m_testname_postfixes = text;
+    m_postfixes.clear();
+    m_postfixes.push_back( "Tests" );
+    m_postfixes.push_back( "Test" );
 }
 
 //____________________________________________________________________________//
@@ -214,15 +219,19 @@ testdox_log_formatter::set_testname_postfix( std::string text )
 std::string
 testdox_log_formatter::to_sentence( std::string text )
 {
-//    for each prefix in m_testname_prefixes:
+//    for each prefix in m_prefixes:
 //        if match prefix in text:
 //            strip_left( text, prefix )
 //            break;  // oly once
 //
-//    for each postfix in m_testname_postfixes:
+//    for each postfix in m_postfixes:
 //        if match prefix in text:
 //            strip_left( text, prefix )
 //            break;  // oly once
+
+//   text = std::for_each(
+//       m_prefixes.begin(), m_prefixes.end(),
+//       strip_left_first_match( text ) );
 
    if ( 0 == text.find( "testThat" ) )
    {

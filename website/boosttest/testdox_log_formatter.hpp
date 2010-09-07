@@ -11,6 +11,9 @@
 
 #include <boost/test/detail/suppress_warnings.hpp>
 
+// STL
+#include <vector>
+
 //____________________________________________________________________________//
 
 namespace boost {
@@ -43,8 +46,8 @@ public:
     void    log_entry_value( std::ostream&, lazy_ostream const& value );
     void    log_entry_finish( std::ostream& );
 
-    void    set_testname_prefix( std::string text );
-    void    set_testname_postfix( std::string text );
+    void    set_testname_prefixes( std::string text );
+    void    set_testname_postfixes( std::string text );
 
 protected:
     virtual void    print_prefix( std::ostream&, const_string file, std::size_t line );
@@ -54,8 +57,11 @@ protected:
 
 private:
 /// TODO (Martin#1#): change to const_string / property ?
-    std::string m_testname_prefixes;
-    std::string m_testname_postfixes;
+    typedef std::vector< std::string > prefixes_t;
+    typedef prefixes_t postfixes_t;
+
+    prefixes_t m_prefixes;
+    postfixes_t m_postfixes;
 };
 
 } // namespace output
