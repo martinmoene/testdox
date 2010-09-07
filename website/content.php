@@ -58,7 +58,7 @@ but apparently not yet to
 <a href="http://www.stickyminds.com/pop_print.asp?ObjectId=14973&ObjectType=ART">GUT Instinct</a>, by <a href="http://www.curbralan.com/">Kevlin Henney</a></li>
 </ul></div>
 
-<p>The original Java TestDox <em>just</em> creates an overview of the test
+<p>The original Java TestDox just creates an overview of the test
 suites and their test cases: it documents the evolving design and code in an
 agile way. To date test frameworks may be able to create the overview as part
 of the test run and also indicate the test's success or failure as in:</p>
@@ -243,3 +243,5 @@ Core.String
 svn <a href="http://unittestpp.googlecode.com/svn/">repository</a></li>
 <li><a href="http://unittest-cpp.sourceforge.net//">UnitTest++ on SourceForge</a></li>
 </ul>
+
+<p style="color:grey;font-size:80%">Page created 6 September 2010</p>

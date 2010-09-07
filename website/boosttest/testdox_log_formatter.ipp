@@ -42,12 +42,14 @@ strip_left( std::string text, std::string to_strip )
    return text;
 }
 
+//____________________________________________________________________________//
+
 inline std::string
 strip_right( std::string text, std::string to_strip )
 {
-    std::size_t pos = text.find( to_strip );
+    std::size_t pos = text.rfind( to_strip );
 
-    if ( pos + to_strip.length() == text.length() )
+    if ( std::string::npos != pos && pos + to_strip.length() == text.length() )
     {
        text.erase( pos, to_strip.length() );
     }
@@ -55,18 +57,53 @@ strip_right( std::string text, std::string to_strip )
     return text;
 }
 
+//____________________________________________________________________________//
+
+typedef std::string (*strip_function_t)( std::string, std::string );
+
+template < strip_function_t strip >
+struct strip_first_match
+{
+    std::string m_text;
+    bool m_done;
+
+    strip_first_match( std::string text )
+    : m_text( text )
+    , m_done( false )
+    {
+    }
+
+    void operator()( std::string const& prefix )
+    {
+      if ( !m_done )
+      {
+         std::string stripped = strip( m_text, prefix );
+         if ( ( m_done = (stripped != m_text) ) )
+         {
+            m_text = stripped;
+         }
+      }
+    }
+
+    operator std::string() const
+    {
+       return m_text;
+    }
+};
+
+typedef strip_first_match< strip_left  > strip_left_first_match;
+typedef strip_first_match< strip_right > strip_right_first_match;
+
 } // local, anonymous namespace
 
 // ************************************************************************** //
 // **************            testdox_log_formatter             ************** //
 // ************************************************************************** //
 
-// weakness: must specify term that is prefix of another term after the latter.
-
 testdox_log_formatter::testdox_log_formatter()
 {
-    set_testname_prefixes( "itShould|testThat|test|" );
-    set_testname_postfixes( "Tests|Test" );
+    set_name_prefixes ( "test|testThat|itShould" );
+    set_name_postfixes( "Test|Tests" );
 }
 
 //____________________________________________________________________________//
@@ -107,7 +144,7 @@ testdox_log_formatter::test_unit_start( std::ostream& output, test_unit const& t
 {
     if ( tu.p_type_name.get() == "suite")
     {
-        output << std::endl << tu.p_name << std::endl;
+        output << std::endl << strip_postfix( tu.p_name ) << std::endl;
     }
 }
 
@@ -132,7 +169,7 @@ void
 testdox_log_formatter::log_exception( std::ostream& output, log_checkpoint_data const& checkpoint_data, const_string explanation )
 {
     print_prefix( output, checkpoint_data.m_file_name, checkpoint_data.m_line_num );
-    output << "[ ] " << to_sentence( framework::current_test_case().p_name) ;
+    output << "[ ] " << to_sentence( framework::current_test_case().p_name ) ;
 
     output << std::endl;
 }
@@ -142,20 +179,23 @@ testdox_log_formatter::log_exception( std::ostream& output, log_checkpoint_data 
 void
 testdox_log_formatter::log_entry_start( std::ostream& output, log_entry_data const& entry_data, log_entry_types let )
 {
-    switch( let ) {
+    std::string sentence = to_sentence( framework::current_test_case().p_name );
+
+    switch( let )
+    {
         case BOOST_UTL_ET_INFO:
         case BOOST_UTL_ET_MESSAGE:
             print_prefix( output, entry_data.m_file_name, entry_data.m_line_num );
-            output << "[x] " << to_sentence( framework::current_test_case().p_name );
+            output << "[x] " << sentence;
             break;
         case BOOST_UTL_ET_WARNING:
             print_prefix( output, entry_data.m_file_name, entry_data.m_line_num );
-            output << "[?] " << to_sentence( framework::current_test_case().p_name );
+            output << "[?] " << sentence;
             break;
         case BOOST_UTL_ET_ERROR:
         case BOOST_UTL_ET_FATAL_ERROR:
             print_prefix( output, entry_data.m_file_name, entry_data.m_line_num );
-            output << "[ ] " << to_sentence( framework::current_test_case().p_name );
+            output << "[ ] " << sentence;
             break;
     }
 }
@@ -195,70 +235,90 @@ testdox_log_formatter::print_prefix( std::ostream& output, const_string file, st
 //____________________________________________________________________________//
 
 void
-testdox_log_formatter::set_testname_prefixes( std::string text )
+testdox_log_formatter::set_name_prefixes( std::string text )
 {
+// TODO (moene#1#): Implement string-to-vector transformation
     m_prefixes.clear();
-    m_prefixes.push_back( "itShould" );
-    m_prefixes.push_back( "testThat" );
     m_prefixes.push_back( "test" );
+    m_prefixes.push_back( "testThat" );
+    m_prefixes.push_back( "itShould" );
+
+    // reverse sort to first use longest prefixes that have a common begin
+    std::sort( m_prefixes.rbegin(), m_prefixes.rend() );
 }
 
 //____________________________________________________________________________//
 
 void
-testdox_log_formatter::set_testname_postfixes( std::string text )
+testdox_log_formatter::set_name_postfixes( std::string text )
 {
+// TODO (moene#1#): Implement string-to-vector transformation
     m_postfixes.clear();
-    m_postfixes.push_back( "Tests" );
     m_postfixes.push_back( "Test" );
+    m_postfixes.push_back( "Tests" );
+
+    // reverse sort to first use longest postfixes that have a common begin
+    std::sort( m_postfixes.rbegin(), m_postfixes.rend() );
 }
 
 //____________________________________________________________________________//
 
+std::string
+testdox_log_formatter::strip_prefix( std::string const& text )
+{
+// TODO (moene#1#): Weakness: This visits all prefixes even if a match was already found
+// TODO (moene#1#): Future: use std::(tr1::)regex ?
+
+    return std::for_each(
+        m_prefixes.begin(), m_prefixes.end(),
+        strip_left_first_match( text ) );
+}
+
+//____________________________________________________________________________//
 
 std::string
-testdox_log_formatter::to_sentence( std::string text )
+testdox_log_formatter::strip_postfix( std::string const& text )
 {
-//    for each prefix in m_prefixes:
-//        if match prefix in text:
-//            strip_left( text, prefix )
-//            break;  // oly once
-//
-//    for each postfix in m_postfixes:
-//        if match prefix in text:
-//            strip_left( text, prefix )
-//            break;  // oly once
+// TODO (moene#1#): Weakness: This visits all postfixes even if a match was already found
+// TODO (moene#1#): Future: use std::(tr1::)regex ?
+    return std::for_each(
+        m_postfixes.begin(), m_postfixes.end(),
+        strip_right_first_match( text ) );
+}
 
-//   text = std::for_each(
-//       m_prefixes.begin(), m_prefixes.end(),
-//       strip_left_first_match( text ) );
+//____________________________________________________________________________//
 
-   if ( 0 == text.find( "testThat" ) )
-   {
-      text = strip_left( text, "testThat" );
-   }
-   else if ( 0 == text.find( "test" ) )
-   {
-      text = strip_left( text, "test" );
-   }
+std::string
+testdox_log_formatter::camelcase_to_sentence( std::string const& text )
+{
+// TODO (moene#1#): Use std::copy() with insert iterator ?
 
-   std::string sentence;
-   for ( std::string::const_iterator pos = text.begin(); pos != text.end(); ++pos)
-   {
-      if ( isupper(*pos) && pos != text.begin() )
-      {
-         sentence.append( 1, ' ');
-      }
-      if ( pos == text.begin() )
-      {
-         sentence.append( 1, toupper(*pos) );
-      }
-      else
-      {
-         sentence.append( 1, tolower(*pos) );
-      }
-   }
-   return sentence;
+    std::string sentence;
+    for ( std::string::const_iterator pos = text.begin(); pos != text.end(); ++pos)
+    {
+        if ( isupper(*pos) && pos != text.begin() )
+        {
+            sentence.append( 1, ' ');
+        }
+
+        if ( pos == text.begin() )
+        {
+            sentence.append( 1, toupper(*pos) );
+        }
+        else
+        {
+            sentence.append( 1, tolower(*pos) );
+        }
+    }
+    return sentence;
+}
+
+//____________________________________________________________________________//
+
+std::string
+testdox_log_formatter::to_sentence( std::string const& text )
+{
+    return camelcase_to_sentence( strip_prefix( strip_postfix( text ) ) );
 }
 
 //____________________________________________________________________________//

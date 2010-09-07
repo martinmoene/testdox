@@ -33,23 +33,28 @@ BOOST_AUTO_TEST_CASE( testPassingTestReportsX )
     BOOST_CHECK( true );
 }
 
-BOOST_AUTO_TEST_CASE( testFailingTestReportsSpace )
+BOOST_AUTO_TEST_CASE( testThatFailingTestReportsSpace )
 {
     BOOST_CHECK( false );
 }
 
+BOOST_AUTO_TEST_CASE( testWarningTestReportsQuestionMarkAndX )
+{
+    BOOST_WARN( false );
+}
+
 class my_exception{};
 
-BOOST_AUTO_TEST_CASE( testThrowingTestReportsSpace )
+BOOST_AUTO_TEST_CASE( itShouldReportSpaceWhenItThrows )
 {
     BOOST_CHECK_NO_THROW( throw my_exception() );
 }
 
 //____________________________________________________________________________//
 
-BOOST_AUTO_TEST_SUITE( MySuite )
+BOOST_AUTO_TEST_SUITE( MySuiteTest )
 
-BOOST_AUTO_TEST_CASE( testThatPassingTestInMySuiteReportsX )
+BOOST_AUTO_TEST_CASE( passingTestInMySuiteReportsXTest )
 {
     BOOST_CHECK( true );
 }

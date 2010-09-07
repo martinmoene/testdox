@@ -46,22 +46,24 @@ public:
     void    log_entry_value( std::ostream&, lazy_ostream const& value );
     void    log_entry_finish( std::ostream& );
 
-    void    set_testname_prefixes( std::string text );
-    void    set_testname_postfixes( std::string text );
+    void    set_name_prefixes( std::string text );
+    void    set_name_postfixes( std::string text );
 
 protected:
-    virtual void    print_prefix( std::ostream&, const_string file, std::size_t line );
+    virtual void   print_prefix( std::ostream&, const_string file, std::size_t line );
 
 /// TODO (Martin#1#): change to const_string / property  ?
-    virtual std::string   testdox_log_formatter::to_sentence( std::string text );
+    typedef std::vector< std::string > strip_terms_t;
+
+    virtual std::string   strip_prefix( std::string const& text );
+    virtual std::string   strip_postfix( std::string const& text );
+    virtual std::string   camelcase_to_sentence( std::string const& text );
+    virtual std::string   to_sentence( std::string const& text );
 
 private:
 /// TODO (Martin#1#): change to const_string / property ?
-    typedef std::vector< std::string > prefixes_t;
-    typedef prefixes_t postfixes_t;
-
-    prefixes_t m_prefixes;
-    postfixes_t m_postfixes;
+    strip_terms_t m_prefixes;
+    strip_terms_t m_postfixes;
 };
 
 } // namespace output
