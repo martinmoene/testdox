@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE( testThatFailingTestReportsSpace )
     BOOST_CHECK( false );
 }
 
-BOOST_AUTO_TEST_CASE( testWarningTestReportsQuestionMarkAndX )
+BOOST_AUTO_TEST_CASE( testWarningTestReportsQuestionMark )
 {
     BOOST_WARN( false );
 }

@@ -184,18 +184,16 @@ testdox_log_formatter::log_entry_start( std::ostream& output, log_entry_data con
     switch( let )
     {
         case BOOST_UTL_ET_INFO:
+            output << " [x] " << sentence << std::endl;
+            break;
         case BOOST_UTL_ET_MESSAGE:
-            print_prefix( output, entry_data.m_file_name, entry_data.m_line_num );
-            output << "[x] " << sentence;
             break;
         case BOOST_UTL_ET_WARNING:
-            print_prefix( output, entry_data.m_file_name, entry_data.m_line_num );
-            output << "[?] " << sentence;
+            output << " [?] " << sentence << std::endl;
             break;
         case BOOST_UTL_ET_ERROR:
         case BOOST_UTL_ET_FATAL_ERROR:
-            print_prefix( output, entry_data.m_file_name, entry_data.m_line_num );
-            output << "[ ] " << sentence;
+            output << " [ ] " << sentence << std::endl;
             break;
     }
 }
@@ -221,7 +219,7 @@ testdox_log_formatter::log_entry_value( std::ostream& output, lazy_ostream const
 void
 testdox_log_formatter::log_entry_finish( std::ostream& output )
 {
-    output << std::endl;
+//    output << std::endl;
 }
 
 //____________________________________________________________________________//
@@ -229,7 +227,7 @@ testdox_log_formatter::log_entry_finish( std::ostream& output )
 void
 testdox_log_formatter::print_prefix( std::ostream& output, const_string file, std::size_t line )
 {
-    output << " ";
+//    output << " ";
 }
 
 //____________________________________________________________________________//
@@ -267,7 +265,7 @@ std::string
 testdox_log_formatter::strip_prefix( std::string const& text )
 {
 // TODO (moene#1#): Weakness: This visits all prefixes even if a match was already found
-// TODO (moene#1#): Future: use std::(tr1::)regex ?
+// TODO (moene#1#): Future: use std::(tr1::)regex (non-header-only!) ?
 
     return std::for_each(
         m_prefixes.begin(), m_prefixes.end(),
@@ -280,7 +278,7 @@ std::string
 testdox_log_formatter::strip_postfix( std::string const& text )
 {
 // TODO (moene#1#): Weakness: This visits all postfixes even if a match was already found
-// TODO (moene#1#): Future: use std::(tr1::)regex ?
+// TODO (moene#1#): Future: use std::(tr1::)regex (non-header-only!) ?
     return std::for_each(
         m_postfixes.begin(), m_postfixes.end(),
         strip_right_first_match( text ) );
