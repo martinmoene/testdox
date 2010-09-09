@@ -168,10 +168,7 @@ testdox_log_formatter::test_unit_skipped( std::ostream& output, test_unit const&
 void
 testdox_log_formatter::log_exception( std::ostream& output, log_checkpoint_data const& checkpoint_data, const_string explanation )
 {
-    print_prefix( output, checkpoint_data.m_file_name, checkpoint_data.m_line_num );
-    output << "[ ] " << to_sentence( framework::current_test_case().p_name ) ;
-
-    output << std::endl;
+    output << " [ ] " << to_sentence( framework::current_test_case().p_name ) << std::endl;
 }
 
 //____________________________________________________________________________//
