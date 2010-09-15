@@ -60,6 +60,7 @@ unit test frameworks
 <li><a href="http://xspecs.sourceforge.net/protest.html">Protest</a> test framework for Python, by <a href="http://www.natpryce.com/">Nat Pryce</a> (Subversion <a title="Subversion trunk at SourceForge" href="https://xspecs.svn.sourceforge.net/svnroot/xspecs/protest-python/trunk">trunk</a>)</li>
 <li><a href="http://www.stickyminds.com/pop_print.asp?ObjectId=13833&ObjectType=ART">Programming with GUTs</a> and
 <a href="http://www.stickyminds.com/pop_print.asp?ObjectId=14973&ObjectType=ART">GUT Instinct</a>, by <a href="http://www.curbralan.com/">Kevlin Henney</a></li>
+<li><a href="http://weblogs.asp.net/rosherove/archive/2005/04/03/TestNamingStandards.aspx">Naming standards for unit tests</a>, by Roy Osherove</li>
 </ul></div>
 
 <p>The original Java TestDox just creates an overview of the test
