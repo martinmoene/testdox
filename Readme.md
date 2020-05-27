@@ -18,7 +18,7 @@ CustomerLookup
   [ ] fails for duplicate customers
 ```
 
-See for example PHPUnit, [Other Uses for Tests: Agile Documentation](http://www.phpunit.de/manual/3.5/en/other-uses-for-tests.html). Although I don\'t know of any non-BDD C++ test frameworks that provide TestDox reporting off-the-shelf, many frameworks may support it via customization of their reporting mechanism. Below I intend to present [several examples of such customization](index.php#FrameworkCustomization). In case you cannot create the TestDox report from your test framework, or do not want to do so, the Python TestDox script presented here may be of help.
+See for example PHPUnit, [Other Uses for Tests: Agile Documentation](http://www.phpunit.de/manual/3.5/en/other-uses-for-tests.html). Although I don\'t know of any non-BDD C++ test frameworks that provide TestDox reporting off-the-shelf, many frameworks may support it via customization of their reporting mechanism. Below I intend to present [several examples of such customization](#framework-customization). In case you cannot create the TestDox report from your test framework, or do not want to do so, the Python TestDox script presented here may be of help.
 
 ## Python TestDox script
 
