@@ -3,7 +3,7 @@ TestDox: example of testdox.py output for CppUnit
 
 Relevant input:
 
-```Text
+```C++
 01: // file: cppunit-fractiontest.h
 02: #ifndef FRACTIONTEST_H
 03: #define FRACTIONTEST_H

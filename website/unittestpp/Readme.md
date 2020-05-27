@@ -3,7 +3,7 @@ UnitTest++ TestDox reporter customization
 
 ### main.cpp:
 
-```Text
+```C++
 #include "unittestpp.h"
 #include "TestReporterTestDoxStdout.h"
 
@@ -19,7 +19,7 @@ int main(int, char const *[])
 
 ### TestReporterTestDoxStdout.h:
 
-```Text
+```C++
 #ifndef UNITTEST_TESTREPORTERTESTDOXSTDOUT_H
 #define UNITTEST_TESTREPORTERTESTDOXSTDOUT_H
 
@@ -49,7 +49,7 @@ private:
 
 ### TestReporterTestDoxStdout.cpp:
 
-```Text
+```C++
 #include "TestReporterTestDoxStdout.h"
 #include <cstdio>
 

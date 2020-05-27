@@ -22,7 +22,7 @@ MySuite
 
 ### main.cpp:
 
-```Text
+```C++
 //
 // cl -EHsc -I%BOOST_ROOT%\include\boost-1_40  main.cpp  testdox_log_formatter.cpp
 //
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_SUITE_END()
 
 ### testdox\_log\_formatter.hpp:
 
-```Text
+```C++
 //
 // testdox_log_formatter.hpp - testdox formatter crafted after compiler_log_formatter
 //
@@ -173,7 +173,7 @@ private:
 
 ### testdox\_log\_formatter.cpp:
 
-```Text
+```C++
 //
 // testdox_log_formatter.cpp - testdox formatter crafted after compiler_log_formatter
 //
@@ -187,7 +187,7 @@ private:
 
 ### testdox\_log\_formatter.ipp:
 
-```Text
+```C++
 //
 // testdox_log_formatter.ipp - testdox formatter crafted after compiler_log_formatter
 //
