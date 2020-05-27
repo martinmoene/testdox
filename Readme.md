@@ -64,30 +64,30 @@ Options:
 
 ## TestDox output examples
 
-- [CppUnit example](output/cppunit/)
-- [Boost.Test example](output/boosttest/)
+- [CppUnit example](website/output/cppunit/)
+- [Boost.Test example](website/output/boosttest/)
 
 ## Framework customization
 
 ### Boost.Test
 
-- [View customization](boosttest/)
+- [View customization](website/boosttest/)
 - [Boost.Test at Boost](http://www.boost.org/doc/libs/release/libs/test/)
 
 ### UnitTest++
 
-- [View customization](unittestpp/)
+- [View customization](website/unittestpp/)
 - [UnitTest++ on Google Code](http://code.google.com/p/unittestpp/), svn [repository](http://unittestpp.googlecode.com/svn/)
 - [UnitTest++ on SourceForge](http://unittest-cpp.sourceforge.net/)
 
 ## Downloads
 
-- [testdox.py](src/testdox.py) ([view highlighted](src/))
-- [Readme](src/Readme.txt)
-- [ChangeLog](src/ChangeLog.txt)
-- [ToDo](src/ToDo.txt)
-- [TestDox-0.1.4-alpha.zip](src/TestDox-0.1.4-alpha.zip)
-- [testdox.exe](src/testdox.exe) packed executable
+- [testdox.py](website/src/testdox.py) ([view highlighted](website/src/))
+- [Readme.txt](Readme.txt)
+- [ChangeLog](ChangeLog.txt)
+- [ToDo](ToDo.txt)
+- [TestDox-0.1.4-alpha.zip](https://secure.eld.leidenuniv.nl/~moene/Home/projects/testdox/src/TestDox-0.1.4-alpha.zip)
+- [testdox.exe](https://secure.eld.leidenuniv.nl/~moene/Home/projects/testdox/src/testdox.exe) packed executable
 
 ## Resources
 
