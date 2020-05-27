@@ -3,9 +3,9 @@
 Simple ideas can be powerful. TestDox is based on such an idea: *Test method names should be sentences*. Using this convention, TestDox can generate a readable overview of your [tests](http://en.wikipedia.org/wiki/Unit_test "Unit testing at Wikipedia"), as in:
 
 ```Text
-CustomerLookup\
- - finds customer by id\
- - fails for duplicate customers\
+CustomerLookup
+ - finds customer by id
+ - fails for duplicate customers
 ```
 
 It was Chris Stevenson\'s idea to present the [camel case](http://en.wikipedia.org/wiki/Camel_case "Camel case at Wikipedia") method names in [JUnit](http://en.wikipedia.org/wiki/Junit "JUnit at Wikipedia") test cases as [sentences](http://en.wikipedia.org/wiki/Sentence_%28linguistics%29 "Sentence at Wikipedia") and in [2003](http://en.wikipedia.org/wiki/2003 "The year 2003 at Wikipedia") he created the [Java](http://en.wikipedia.org/wiki/Java_%28programming_language%29 "Java at Wikipedia") program [TestDox](http://skizz.biz/blog/2003/06/17/testdox-release-01/ "Chris Stevenson's Blog mentioning TestDox"). The idea has spread to tools or [unit test frameworks](http://en.wikipedia.org/wiki/Unit_test#Unit_testing_frameworks "Unit testing frameworks at Wikipedia") for several [programming languages](http://en.wikipedia.org/wiki/Programming_language "Programming language at Wikipedia") such as [C\#](http://en.wikipedia.org/wiki/C%2B%2B "C# at Wikipedia") ([.net](http://en.wikipedia.org/wiki/C%2B%2B ".net at Wikipedia")) and [PHP](http://en.wikipedia.org/wiki/C%2B%2B "PHP at Wikipedia") and it seems common for frameworks for [Behavior Driven Development (BDD)](http://en.wikipedia.org/wiki/Behavior_driven_development "Behavior Driven Development (BDD) at Wikipedia"). However I haven\'t come across it in conventional [C++](http://en.wikipedia.org/wiki/C%2B%2B "C++ at Wikipedia") unit test frameworks ([check-it](http://www.google.nl/search?q=%2Btestdox+%2Bc%2B%2B "Perform a Google search on +testdox +C++")).
