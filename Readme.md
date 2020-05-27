@@ -82,7 +82,7 @@ Options:
 
 ## Downloads
 
-- [testdox.py](website/src/testdox.py) ([view highlighted](website/src/))
+- [testdox.py](testdox.py) ([view highlighted](website/src/))
 - [Readme.txt](Readme.txt)
 - [ChangeLog](ChangeLog.txt)
 - [ToDo](ToDo.txt)
